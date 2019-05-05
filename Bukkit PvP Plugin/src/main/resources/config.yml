@@ -1,0 +1,8 @@
+# Primary config settings
+# Defaults:
+# pvp-global-enabled: false
+# pvp-global-override: true
+# pvp-default: false
+pvp-global-enabled: false
+pvp-global-override: true
+pvp-default: false
