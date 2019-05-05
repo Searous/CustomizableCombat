@@ -67,7 +67,7 @@ public final class CustomizableCombat extends JavaPlugin {
         // Enabling finished
         this.getServer().getConsoleSender().sendMessage(strings.LOG_HEADER + "PvP Plugin Loaded!");
     }
-
+    
     @Override
     public void onDisable() {
         // Plugin shutdown logic
