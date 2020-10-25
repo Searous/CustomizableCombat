@@ -58,7 +58,7 @@ public class CommandPvp implements TabExecutor {
                 // Check for/if a sub-command is being executed
                 if(subSubcommand.equalsIgnoreCase(ON)) {
                     //region Quick enable
-                    if(sender.hasPermission(plugin.getSTrings().PERM_PVP)) {
+                    if(sender.hasPermission(plugin.getStrings().PERM_PVP)) {
                         if(sender instanceof Player) {
                             plugin.setPvpEnabled(sender.getName(), true);
                             sender.sendMessage(ChatColor.YELLOW + "Your PvP was updated to: " + ChatColor.AQUA + ON);
@@ -74,7 +74,7 @@ public class CommandPvp implements TabExecutor {
                 } else if(subSubcommand.equalsIgnoreCase(OFF)) {
                     //region Quick disable
     
-                    if(sender.hasPermission(plugin.getSTrings().PERM_PVP)) {
+                    if(sender.hasPermission(plugin.getStrings().PERM_PVP)) {
                         if(sender instanceof Player) {
                             plugin.setPvpEnabled(sender.getName(), false);
                             sender.sendMessage(ChatColor.YELLOW + "Your PvP was updated to: " + ChatColor.AQUA + OFF);
@@ -92,7 +92,7 @@ public class CommandPvp implements TabExecutor {
 
                     // Syntax: /pvp check [player]
                     
-                    if(sender.hasPermission(plugin.getSTrings().PERM_PVP_CHECK)) {
+                    if(sender.hasPermission(plugin.getStrings().PERM_PVP_CHECK)) {
                         if(args.length == 2) {
                             // Player Specified
                             // Check if player has played
@@ -131,7 +131,7 @@ public class CommandPvp implements TabExecutor {
 
                     // Syntax: /pvp players <player> <on/off>
                     
-                    if(sender.hasPermission(plugin.getSTrings().PERM_PVP_PLAYERS)) {
+                    if(sender.hasPermission(plugin.getStrings().PERM_PVP_PLAYERS)) {
                         // Check if the correct number of arguments was provided
                         if(args.length == 3) {
                             // Correct argument count
@@ -199,7 +199,7 @@ public class CommandPvp implements TabExecutor {
 
                     // Syntax: /pvp global <global/override> <on/off>
                     
-                    if(sender.hasPermission(plugin.getSTrings().PERM_PVP_GLOBAL)) {
+                    if(sender.hasPermission(plugin.getStrings().PERM_PVP_GLOBAL)) {
                         // Check if enough arguments were provided
                         if(args.length == 3) {
                             // Arguments
@@ -209,8 +209,8 @@ public class CommandPvp implements TabExecutor {
                             // Check which value is being set
                             if(type.equalsIgnoreCase(ENABLED)) {
                                 // Setting global
-                                boolean pvpGlobal   = plugin.getConfig().getBoolean(plugin.getSTrings().CONFIG_PVP_GLOBAL_ENABLED);
-                                boolean pvpOverride = plugin.getConfig().getBoolean(plugin.getSTrings().CONFIG_PVP_GLOBAL_OVERRIDE);
+                                boolean pvpGlobal   = plugin.getConfig().getBoolean(plugin.getStrings().CONFIG_PVP_GLOBAL_ENABLED);
+                                boolean pvpOverride = plugin.getConfig().getBoolean(plugin.getStrings().CONFIG_PVP_GLOBAL_OVERRIDE);
             
                                 if(bool.equalsIgnoreCase(ON)) {
                                     // Setting global to on
@@ -252,8 +252,8 @@ public class CommandPvp implements TabExecutor {
                                 }
                             } else if(type.equalsIgnoreCase(OVERRIDE)) {
                                 // Setting override
-                                boolean pvpGlobal   = plugin.getConfig().getBoolean(plugin.getSTrings().CONFIG_PVP_GLOBAL_ENABLED);
-                                boolean pvpOverride = plugin.getConfig().getBoolean(plugin.getSTrings().CONFIG_PVP_GLOBAL_OVERRIDE);
+                                boolean pvpGlobal   = plugin.getConfig().getBoolean(plugin.getStrings().CONFIG_PVP_GLOBAL_ENABLED);
+                                boolean pvpOverride = plugin.getConfig().getBoolean(plugin.getStrings().CONFIG_PVP_GLOBAL_OVERRIDE);
             
                                 if(bool.equalsIgnoreCase(ON)) {
                                     // Setting override to on
@@ -325,17 +325,17 @@ public class CommandPvp implements TabExecutor {
             int argIndex = 0;
 
             if(args.length <= 1) { // On/Off
-                if(sender.hasPermission(plugin.getSTrings().PERM_PVP)) {
+                if(sender.hasPermission(plugin.getStrings().PERM_PVP)) {
                     list.add(ON);
                     list.add(OFF);
                 }
-                if(sender.hasPermission(plugin.getSTrings().PERM_PVP_PLAYERS)) list.add(SUB_LABEL_LOCAL);
-                if(sender.hasPermission(plugin.getSTrings().PERM_PVP_GLOBAL)) list.add(SUB_LABEL_GLOBAL);
-                if(sender.hasPermission(plugin.getSTrings().PERM_PVP_CHECK)) list.add(SUB_LABEL_CHECK);
+                if(sender.hasPermission(plugin.getStrings().PERM_PVP_PLAYERS)) list.add(SUB_LABEL_LOCAL);
+                if(sender.hasPermission(plugin.getStrings().PERM_PVP_GLOBAL)) list.add(SUB_LABEL_GLOBAL);
+                if(sender.hasPermission(plugin.getStrings().PERM_PVP_CHECK)) list.add(SUB_LABEL_CHECK);
                 
                 argIndex = 0;
             } else {
-                if(args[0].equalsIgnoreCase(SUB_LABEL_LOCAL) && sender.hasPermission(plugin.getSTrings().PERM_PVP_PLAYERS)) { // Local
+                if(args[0].equalsIgnoreCase(SUB_LABEL_LOCAL) && sender.hasPermission(plugin.getStrings().PERM_PVP_PLAYERS)) { // Local
                     if(args.length == 3) {
                         list.add(ON);
                         list.add(OFF);
@@ -346,7 +346,7 @@ public class CommandPvp implements TabExecutor {
 
                         argIndex = 1;
                     }
-                } else if(args[0].equalsIgnoreCase(SUB_LABEL_GLOBAL) && sender.hasPermission(plugin.getSTrings().PERM_PVP_GLOBAL)) { // Global
+                } else if(args[0].equalsIgnoreCase(SUB_LABEL_GLOBAL) && sender.hasPermission(plugin.getStrings().PERM_PVP_GLOBAL)) { // Global
                     if(args.length == 2) {
                         list.add(ENABLED);
                         list.add(OVERRIDE);
@@ -363,7 +363,7 @@ public class CommandPvp implements TabExecutor {
 
                         argIndex = 2;
                     }
-                } else if(args[0].equalsIgnoreCase(SUB_LABEL_CHECK) && sender.hasPermission(plugin.getSTrings().PERM_PVP_CHECK)) { // Check
+                } else if(args[0].equalsIgnoreCase(SUB_LABEL_CHECK) && sender.hasPermission(plugin.getStrings().PERM_PVP_CHECK)) { // Check
                     if(args.length == 2) {
                         //list = null;
 

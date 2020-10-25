@@ -1,5 +1,6 @@
 package searous.customizableCombat.main;
 
+import org.bukkit.World;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -40,6 +41,9 @@ public final class CustomizableCombat extends JavaPlugin {
      */
     private FileConfiguration players = null;
     
+    private File fileWorlds = null;
+    private FileConfiguration worlds = null;
+    
     @Override
     public void onEnable() {
         // Create event handler
@@ -60,6 +64,10 @@ public final class CustomizableCombat extends JavaPlugin {
         players = YamlConfiguration.loadConfiguration(filePlayers);
         players.options().copyDefaults(true);
         savePlayersConfig();
+        
+        //fileWorlds = new File(this.getDataFolder(), "worlds.yml");
+        //worlds = YamlConfiguration.loadConfiguration(fileWorlds);
+        //saveWorldsConfig();
         
         // Strings
         strings = new Strings(this);
@@ -105,7 +113,7 @@ public final class CustomizableCombat extends JavaPlugin {
      *
      * @return Instance of {@link Strings}
      */
-    public Strings getSTrings() { return strings; }
+    public Strings getStrings() { return strings; }
     
     // Methods
     /**
@@ -119,6 +127,15 @@ public final class CustomizableCombat extends JavaPlugin {
         }
     }
     
+    public void saveWorldsConfig() {
+        try {
+            worlds.save(fileWorlds);
+        } catch (IOException ex) {
+            this.getLogger().log(Level.SEVERE, strings.LOG_HEADER + "Could not save worlds config to " + filePlayers, ex);
+        }
+    }
+    
+    
     /**
      * Gets weather or not the given player has PvP enabled
      *
@@ -128,11 +145,11 @@ public final class CustomizableCombat extends JavaPlugin {
     public boolean getPvpEnabled(String name) {
         return players.getBoolean(name + "." + strings.PREFERANCE_PVP);
     }
-
+    
     /**
      * Gets if global PvP is enabled
      */
-    public boolean getPvpEnabledGlobal() {
+    public boolean getPvpEnabledGlobal(World world) {
         return this.getConfig().getBoolean(strings.CONFIG_PVP_GLOBAL_ENABLED);
     }
     
@@ -141,7 +158,7 @@ public final class CustomizableCombat extends JavaPlugin {
      *
      * @return PvP Override setting
      */
-    public boolean getPvpEnabledOverride() {
+    public boolean getPvpEnabledOverride(World world) {
         return this.getConfig().getBoolean(strings.CONFIG_PVP_GLOBAL_OVERRIDE);
     }
     
