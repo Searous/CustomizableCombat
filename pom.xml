@@ -6,7 +6,7 @@
 
     <groupId>searous</groupId>
     <artifactId>CustomizableCombat</artifactId>
-    <version>1.0.2</version>
+    <version>1.1</version>
     <packaging>jar</packaging>
 
     <name>CustomizableCombat</name>

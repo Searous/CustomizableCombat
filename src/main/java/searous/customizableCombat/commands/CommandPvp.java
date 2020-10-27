@@ -209,8 +209,8 @@ public class CommandPvp implements TabExecutor {
                             // Check which value is being set
                             if(type.equalsIgnoreCase(ENABLED)) {
                                 // Setting global
-                                boolean pvpGlobal   = plugin.getConfig().getBoolean(plugin.getStrings().CONFIG_PVP_GLOBAL_ENABLED);
-                                boolean pvpOverride = plugin.getConfig().getBoolean(plugin.getStrings().CONFIG_PVP_GLOBAL_OVERRIDE);
+                                boolean pvpGlobal   = plugin.getWorldsConfig().getBoolean("global." + plugin.getStrings().CONFIG_PVP_GLOBAL_ENABLED);
+                                boolean pvpOverride = plugin.getWorldsConfig().getBoolean("global." + plugin.getStrings().CONFIG_PVP_GLOBAL_OVERRIDE);
             
                                 if(bool.equalsIgnoreCase(ON)) {
                                     // Setting global to on
@@ -252,8 +252,8 @@ public class CommandPvp implements TabExecutor {
                                 }
                             } else if(type.equalsIgnoreCase(OVERRIDE)) {
                                 // Setting override
-                                boolean pvpGlobal   = plugin.getConfig().getBoolean(plugin.getStrings().CONFIG_PVP_GLOBAL_ENABLED);
-                                boolean pvpOverride = plugin.getConfig().getBoolean(plugin.getStrings().CONFIG_PVP_GLOBAL_OVERRIDE);
+                                boolean pvpGlobal   = plugin.getWorldsConfig().getBoolean("global." + plugin.getStrings().CONFIG_PVP_GLOBAL_ENABLED);
+                                boolean pvpOverride = plugin.getWorldsConfig().getBoolean("global." + plugin.getStrings().CONFIG_PVP_GLOBAL_OVERRIDE);
             
                                 if(bool.equalsIgnoreCase(ON)) {
                                     // Setting override to on

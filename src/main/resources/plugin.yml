@@ -1,5 +1,5 @@
 name: "CustomizableCombat"
-version: "1.0.2"
+version: "1.1"
 main: searous.customizableCombat.main.CustomizableCombat
 api-version: "1.16"
 commands:

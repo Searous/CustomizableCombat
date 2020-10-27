@@ -1,8 +1,33 @@
-# Primary config settings
-# Defaults:
-# pvp-global-enabled: false
-# pvp-global-override: true
-# pvp-default: false
-pvp-global-enabled: false
-pvp-global-override: true
-pvp-default: false
+
+# The name of the pvp command
+# Default: pvp
+pvp-command-label: pvp
+
+# Enable or disable pet protection. Protects a player's pets from
+# other players if they can't engage in PvP.
+# Default: true
+pet-protection: true
+# List of all pets protected.
+# Default: Wolf, Cat, Parrot
+# Supported: Wolf, Cat, Parrot, Horse, Donkey, Mule, Skeleton Horse
+protected-pets:
+  - Wolf
+  - Cat
+  - Parrot
+
+# Enabled or disable mount protection. Protects the mob a player
+# is riding if they can't engage in PvP.
+# Default: true
+mount-protection: true
+# List of all mounts protected.
+# Default: Horse, Donkey, Skeleton Horse, Mule, Skeleton Horse, Pig Strider
+# Supported: Horse, Donkey, Skeleton Horse, Mule, Skeleton Horse, Pig Strider
+protected-mounts:
+  - Horse
+  - Donkey
+  - Skeleton Horse
+  - Mule
+  - Llama
+  - Pig
+  - Strider
+

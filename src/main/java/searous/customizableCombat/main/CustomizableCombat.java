@@ -7,9 +7,12 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import searous.customizableCombat.commands.CommandPvp;
+import searous.customizableCombat.utilities.ConfigUpdater;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 
 /**
@@ -46,6 +49,61 @@ public final class CustomizableCombat extends JavaPlugin {
     
     @Override
     public void onEnable() {
+        // Strings
+        strings = new Strings(this);
+        
+        // Config
+        //this.getConfig().options().copyDefaults(true);
+        //this.saveConfig();
+        this.saveDefaultConfig();
+        File configFile = new File(getDataFolder(), "config.yml");
+        
+        try {
+            ConfigUpdater.update(this, "config.yml", configFile, Arrays.asList());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        reloadConfig();
+        
+        this.getServer().getConsoleSender().sendMessage(strings.LOG_HEADER + "Loading configs...");
+    
+        List<String> pets = getConfig().getStringList(strings.CONFIG_PROTECTED_PETS);
+        for(int i = 0; i < pets.size(); i++) {
+            String entry = pets.get(i);
+            
+            entry = entry.toUpperCase();
+            entry = entry.trim();
+            entry = entry.replace(' ', '_');
+            
+            pets.set(i, entry);
+        }
+        getConfig().set(strings.CONFIG_PROTECTED_PETS, pets);
+        
+        List<String> mounts = getConfig().getStringList(strings.CONFIG_PROTECTED_MOUNTS);
+        for(int i = 0; i < mounts.size(); i++) {
+            String entry = mounts.get(i);
+        
+            entry = entry.toUpperCase();
+            entry = entry.trim();
+            entry = entry.replace(' ', '_');
+            
+            mounts.set(i, entry);
+        }
+        getConfig().set(strings.CONFIG_PROTECTED_MOUNTS, mounts);
+    
+        filePlayers = new File(this.getDataFolder(), "players.yml");
+        players = YamlConfiguration.loadConfiguration(filePlayers);
+        players.options().copyDefaults(true);
+        savePlayersConfig();
+    
+        fileWorlds = new File(this.getDataFolder(), "worlds.yml");
+        worlds = YamlConfiguration.loadConfiguration(fileWorlds);
+        worlds.options().copyDefaults(true);
+        saveWorldsConfig();
+    
+        this.getServer().getConsoleSender().sendMessage(strings.LOG_HEADER + "All configs loaded!");
+        
         // Create event handler
         eventHandler = new EventHandler(this);
         
@@ -56,22 +114,6 @@ public final class CustomizableCombat extends JavaPlugin {
         // Register Events
         this.getServer().getPluginManager().registerEvents(eventHandler, this);
         
-        // Config
-        this.getConfig().options().copyDefaults(true);
-        this.saveConfig();
-
-        filePlayers = new File(this.getDataFolder(), "players.yml");
-        players = YamlConfiguration.loadConfiguration(filePlayers);
-        players.options().copyDefaults(true);
-        savePlayersConfig();
-        
-        //fileWorlds = new File(this.getDataFolder(), "worlds.yml");
-        //worlds = YamlConfiguration.loadConfiguration(fileWorlds);
-        //saveWorldsConfig();
-        
-        // Strings
-        strings = new Strings(this);
-        
         // Enabling finished
         this.getServer().getConsoleSender().sendMessage(strings.LOG_HEADER + "PvP Plugin Loaded!");
     }
@@ -79,12 +121,14 @@ public final class CustomizableCombat extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-        this.saveConfig();
+        //this.saveConfig();
         this.getLogger().log(Level.INFO, strings.LOG_HEADER + "Config Saved");
         
         savePlayersConfig();
         this.getLogger().log(Level.INFO, strings.LOG_HEADER + "Player preferences saved");
-
+        saveWorldsConfig();
+        this.getLogger().log(Level.INFO, strings.LOG_HEADER + "Player preferences saved");
+        
         // Plugin disable complete
         this.getLogger().log(Level.INFO, strings.LOG_HEADER + "Plugin disabling complete");
     }
@@ -149,8 +193,8 @@ public final class CustomizableCombat extends JavaPlugin {
     /**
      * Gets if global PvP is enabled
      */
-    public boolean getPvpEnabledGlobal(World world) {
-        return this.getConfig().getBoolean(strings.CONFIG_PVP_GLOBAL_ENABLED);
+    public boolean getPvpEnabledGlobal() {
+        return worlds.getBoolean("global." + strings.CONFIG_PVP_GLOBAL_ENABLED);
     }
     
     /**
@@ -158,8 +202,8 @@ public final class CustomizableCombat extends JavaPlugin {
      *
      * @return PvP Override setting
      */
-    public boolean getPvpEnabledOverride(World world) {
-        return this.getConfig().getBoolean(strings.CONFIG_PVP_GLOBAL_OVERRIDE);
+    public boolean getPvpEnabledOverride() {
+        return worlds.getBoolean("global." + strings.CONFIG_PVP_GLOBAL_OVERRIDE);
     }
     
     /**
@@ -172,6 +216,10 @@ public final class CustomizableCombat extends JavaPlugin {
         players.set(name + "." + strings.PREFERANCE_PVP, enabled);
     }
     
+    public FileConfiguration getWorldsConfig() {
+        return worlds;
+    }
+    
     /**
      * Sets both global, and global override settings. May change in the future
      *
@@ -179,7 +227,8 @@ public final class CustomizableCombat extends JavaPlugin {
      * @param override New global override setting
      */
     public void setPvpEnabledGlobal(boolean global, boolean override) {
-        this.getConfig().set(strings.CONFIG_PVP_GLOBAL_ENABLED, global);
-        this.getConfig().set(strings.CONFIG_PVP_GLOBAL_OVERRIDE, override);
+        worlds.set("global." + strings.CONFIG_PVP_GLOBAL_ENABLED, global);
+        worlds.set("global." + strings.CONFIG_PVP_GLOBAL_OVERRIDE, override);
+        saveWorldsConfig();
     }
 }

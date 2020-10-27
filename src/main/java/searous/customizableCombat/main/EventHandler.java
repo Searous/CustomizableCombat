@@ -3,109 +3,90 @@ package searous.customizableCombat.main;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.*;
+import org.bukkit.entity.memory.MemoryKey;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+
+import java.util.*;
 
 /**
  *
  * @author Katie (Searous)
  */
 public class EventHandler implements Listener {
-    private CustomizableCombat plugin;
-
+    private final CustomizableCombat plugin;
+    private final List<String> protectedPets;
+    private final List<String> protectedMounts;
+    
     public EventHandler(CustomizableCombat plugin) {
+        // Set local plugin variable
         this.plugin = plugin;
+        
+        // Grab entity name lists for easy access
+        protectedPets = plugin.getConfig().getStringList(plugin.getStrings().CONFIG_PROTECTED_PETS);
+        protectedMounts = plugin.getConfig().getStringList(plugin.getStrings().CONFIG_PROTECTED_MOUNTS);
+        
+        // Debug
+        /*String str = protectedPets.get(0);
+        for(int i = 1; i < protectedPets.size(); i++) {
+            str += "," + protectedPets.get(i);
+        }
+        plugin.getServer().getConsoleSender().sendMessage("Protected Pets: " + str);
+        
+        str = protectedMounts.get(0);
+        for(int i = 1; i < protectedMounts.size(); i++) {
+            str += "," + protectedMounts.get(i);
+        }
+        plugin.getServer().getConsoleSender().sendMessage("Protected Mounts: " + str);*/
     }
     
     /**
      * Used here to stop incoming damage when PvP conditions are not met for a given attacker/target set
      * 
-     * @param event
+     * @param event The event being passed in by Bukkit
      */
     @org.bukkit.event.EventHandler
     public void onDamage(EntityDamageByEntityEvent event) {
-        if(event.getDamager() instanceof Player) {
-            // Check if both the source and the target are players
-            if(plugin.getPvpEnabledGlobal(event.getEntity().getWorld())) {
-                if(!plugin.getPvpEnabledOverride(event.getEntity().getWorld())) {
-                    // PvP Forced disabled
-                    event.setCancelled(true);
-                }
-            } else if(event.getEntity() instanceof Player) {
-                // Player Protection
-                Player target = (Player) event.getEntity();
+        boolean isProtected;
+        Entity attacker = event.getDamager(),
+        defender = event.getEntity();
         
-                if(event.getDamager() instanceof Player) {
-                    // Attack is anothe rplayer
-                    Player attacker = (Player) event.getDamager();
-            
-                    checkDamagable(event, target, attacker);
-                } else if(event.getDamager() instanceof Projectile) {
-                    // Attacker is a projectile
-                    Projectile projectile = (Projectile) event.getDamager();
-            
-                    if(projectile.getShooter() instanceof Player) {
-                        // Attacker is a player
-                        Player attacker = (Player) projectile.getShooter();
-                
-                        checkDamagable(event, target, attacker);
-                    }
-                }
-            } else if(event.getEntity() instanceof Tameable) {
-                // Pet Protection
-                Tameable pet              = (Tameable) event.getEntity();
-                boolean  isOwnerProtected = false;
-    
-                // Is Owner Protected Status
-                if(pet instanceof Wolf || pet instanceof Cat || pet instanceof Parrot)
-                    isOwnerProtected = true;
-    
-                if(isOwnerProtected && pet.isTamed() && event.getDamager() instanceof Player) {
-                    AnimalTamer owner    = pet.getOwner();
-                    Player      attacker = (Player) event.getDamager();
+        // Check which entity is attacking, then check defenders
         
-                    if(plugin.getPvpEnabledGlobal(event.getEntity().getWorld())) {
-                        if(!plugin.getPvpEnabledOverride(event.getEntity().getWorld())) {
-                            // PvP Forced disabled
-                            event.setCancelled(true);
-                        }
-                    } else {
-                        if(!plugin.getPvpEnabled(owner.getName())) {
-                            attacker.sendMessage(ChatColor.YELLOW + pet.getName() + "'s owner's PvP is disabled!");
-                            attacker.playSound(attacker.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f);
-                            event.setCancelled(true);
-                        } else if(!plugin.getPvpEnabled(attacker.getName())) {
-                            attacker.sendMessage(ChatColor.YELLOW + "Your PvP is disabled, and this pet is owned by another player!");
-                            attacker.playSound(attacker.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f);
-                            event.setCancelled(true);
-                        }
-                    }
-                }
-            } else {
-                // Mount Protection
-                for(int i = 0; i < event.getEntity().getPassengers().size(); i++) {
-                    if(event.getEntity().getPassengers().get(i) instanceof Player) {
-                        // Determine protection
-                        Entity mount = event.getEntity().getPassengers().get(i);
-                        Player passenger = (Player) event.getEntity().getPassengers().get(i);
-                        Player attacker = (Player) event.getDamager();
+        // Determine if event.getEntity() should be protected
+        if(attacker instanceof Player) {
+            // Attacker is a player
+            Player attackingPlayer = (Player)attacker;
+            
+            // Check if this player can attack the other
+            isProtected = checkDefender(event, attackingPlayer, defender);
+        } else if(event.getDamager() instanceof Projectile) {
+            // Attacker is a projectile
+            Projectile projectile = (Projectile) event.getDamager();
+            
+            // Check if this projectile's owner could attack this player
+            if(projectile.getShooter() instanceof Player) {
+                Player attackingPlayer = (Player)projectile.getShooter();
     
-                        if(plugin.getPvpEnabledGlobal(event.getEntity().getWorld())) {
-                            if(!plugin.getPvpEnabledOverride(event.getEntity().getWorld())) {
-                                // PvP Forced disabled
-                                event.setCancelled(true);
-                            }
-                        } else {
-                            if(!plugin.getPvpEnabled(passenger.getName())) {
-                                attacker.sendMessage(ChatColor.YELLOW + mount.getName() + "'s rider's PvP is disabled!");
-                                attacker.playSound(attacker.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f);
-                                event.setCancelled(true);
-                            } else if(!plugin.getPvpEnabled(attacker.getName())) {
-                                attacker.sendMessage(ChatColor.YELLOW + "Your PvP is disabled, and someone is riding " + mount.getName() + "!");
-                                attacker.playSound(attacker.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f);
-                                event.setCancelled(true);
-                            }
+                isProtected = checkDefender(event, attackingPlayer, defender);
+            }
+        } else if(event.getDamager() instanceof Tameable) {
+            // Attacker is a pet
+            Tameable attackingPet = (Tameable) event.getDamager();
+            
+            // Check if this pet's owner could attack this player
+            if(attackingPet.isTamed()) {
+                if(attackingPet.getOwner() instanceof Player) {
+                    Player attackingPlayer = (Player)attackingPet.getOwner();
+                    
+                    isProtected = checkDefender(event, attackingPlayer, defender);
+                    if(isProtected) {
+                        if(attackingPet instanceof Wolf) {
+                            // Cancel wolf anger
+                            Wolf wolf = (Wolf)attackingPet;
+                            wolf.setSitting(true);
+                            wolf.setAngry(false);
                         }
                     }
                 }
@@ -127,30 +108,77 @@ public class EventHandler implements Listener {
     }
     
     /**
+     * To be called in onDamage. Determines if the defender is eligible for protection, then checks if it should be protected.
+     * @param event The event this was called in
+     * @param attackingPlayer The player attempting to attack the defender
+     * @param defender The defending entity
+     */
+    private boolean checkDefender(EntityDamageByEntityEvent event, Player attackingPlayer, Entity defender) {
+        if(defender instanceof Player) {
+            // Defender is a player
+            return checkDamageable(event, attackingPlayer, (Player)defender);
+        } else if(protectedPets.contains(event.getEntity().getType().toString())) {
+            // Defender is a pet
+            if(event.getEntity() instanceof Tameable) {
+                Tameable pet = (Tameable)defender;
+            
+                if(pet.getOwner() instanceof Player && pet.getOwner() != attackingPlayer) {
+                    Player owner = (Player) pet.getOwner();
+                    
+                    return checkDamageable(event, attackingPlayer, owner);
+                }
+            }
+        } else if(protectedMounts.contains(event.getEntity().getType().toString())) {
+            // Defender is a mount
+            List<Entity> passengers = event.getEntity().getPassengers();
+            if(passengers.size() > 0) {
+                for(int i = 0; i < passengers.size(); i++) {
+                    if(passengers.get(i) instanceof Player) {
+                        Player rider = (Player)passengers.get(i);
+    
+                        return checkDamageable(event, attackingPlayer, rider);
+                    }
+                }
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
      * Checks if the given attacker is able to damage the given target.
      * Sends chat messages to attacker if PvP conditions are not met, then cancels the event.
      * 
-     * @param event
-     * @param target
-     * @param attacker
+     * @param event The event this was being called from.
+     * @param defender The target (defending) player.
+     * @param attacker The attacking player
      */
-    private void checkDamagable(EntityDamageByEntityEvent event, Player target, Player attacker) {
+    private boolean checkDamageable(EntityDamageByEntityEvent event, Player attacker, Player defender) {
     	// If global is true, cancel if override is false
-        if(plugin.getPvpEnabledGlobal(event.getEntity().getWorld())) {
-            if(!plugin.getPvpEnabledOverride(event.getEntity().getWorld())) {
+        if(plugin.getPvpEnabledGlobal()) {
+            if(!plugin.getPvpEnabledOverride()) {
                 // PvP Forced disabled
-                event.setCancelled(true);
-            }
-        } else {
-            if(!plugin.getPvpEnabled(target.getName())) {
-                attacker.sendMessage(ChatColor.YELLOW + target.getName() + "'s PvP is disabled!");
+                attacker.sendMessage("PvP Is Disabled");
                 attacker.playSound(attacker.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f);
                 event.setCancelled(true);
+                return true;
+            }
+            
+            return false;
+        } else {
+            if(!plugin.getPvpEnabled(defender.getName())) {
+                attacker.sendMessage(ChatColor.YELLOW + defender.getName() + "'s PvP is disabled!");
+                attacker.playSound(attacker.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f);
+                event.setCancelled(true);
+                return true;
             } else if(!plugin.getPvpEnabled(attacker.getName())) {
                 attacker.sendMessage(ChatColor.YELLOW + "Your PvP is disabled!");
                 attacker.playSound(attacker.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f);
                 event.setCancelled(true);
+                return true;
             }
+            
+            return false;
         }
     }
 }

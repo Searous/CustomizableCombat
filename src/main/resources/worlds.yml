@@ -1,0 +1,6 @@
+# This file in the future may contain a list of worlds
+# with separate  global overrides for each.
+global:
+  pvp-global-enabled: false
+  pvp-global-override: true
+  pvp-default: false
