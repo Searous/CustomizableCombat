@@ -24,14 +24,15 @@ public final class Strings {
      * Paths for config.yml
      */
     public final String
-        CONFIG_PVP_COMMAND_LABEL    = "pvp-command-label",
+        CONFIG_PVP_COMMAND_LABEL    = "commands.pvp-command-label",
+        CONFIG_DUEL_COMMAND_LABEL   = "commands.duel-command-label",
         CONFIG_PVP_GLOBAL_ENABLED   = "pvp-global-enabled",
         CONFIG_PVP_GLOBAL_OVERRIDE  = "pvp-global-override",
         CONFIG_PVP_DEFAULT          = "pvp-default",
-        CONFIG_PET_PROTECTION       = "pet-protection",
-        CONFIG_PROTECTED_PETS       = "protected-pets",
-        CONFIG_MOUNT_PROTECTION     = "mount-protection",
-        CONFIG_PROTECTED_MOUNTS     = "protected-mounts"
+        CONFIG_PET_PROTECTION       = "mob-protection.pet-protection",
+        CONFIG_PROTECTED_PETS       = "mob-protection.protected-pets",
+        CONFIG_MOUNT_PROTECTION     = "mob-protection.mount-protection",
+        CONFIG_PROTECTED_MOUNTS     = "mob-protection.protected-mounts"
     ;
     
     // Player preferences paths
@@ -50,7 +51,9 @@ public final class Strings {
         PERM_PVP            = CODE_NAME + ".pvp.onoff",
         PERM_PVP_GLOBAL     = CODE_NAME + ".pvp.global",
         PERM_PVP_PLAYERS    = CODE_NAME + ".pvp.players",
-        PERM_PVP_CHECK      = CODE_NAME + ".pvp.check";
+        PERM_PVP_CHECK      = CODE_NAME + ".pvp.check",
+        PERM_DUEL           = CODE_NAME + ".duel"
+    ;
         
     public Strings(CustomizableCombat plugin) {
     

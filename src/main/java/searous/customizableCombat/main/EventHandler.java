@@ -2,11 +2,18 @@ package searous.customizableCombat.main;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.*;
 import org.bukkit.entity.memory.MemoryKey;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.RenderType;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
+import searous.customizableCombat.duel.Duel;
 
 import java.util.*;
 
@@ -51,6 +58,22 @@ public class EventHandler implements Listener {
         boolean isProtected;
         Entity attacker = event.getDamager(),
         defender = event.getEntity();
+        
+        // Duel ending
+        if(attacker instanceof Player && defender instanceof Player) {
+            Duel duel = plugin.getDuelManager().getDuel((Player) attacker, (Player) defender);
+            if(duel != null) {
+                if(duel.isDuelStarted()) {
+                    if(((Player) defender).getHealth() - event.getDamage() <= 0d) {
+                        plugin.getDuelManager().cancelDuel(duel);
+                        ((Player) attacker).setHealth(((Player) attacker).getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+                        ((Player) defender).setHealth(((Player) defender).getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+                        event.setCancelled(true);
+                        return;
+                    }
+                }
+            }
+        }
         
         // Check which entity is attacking, then check defenders
         
@@ -98,7 +121,7 @@ public class EventHandler implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         Object o = plugin.getPlayerPreferences().get(player.getName());
-
+        
         if(o == null) {
             plugin.getServer().getConsoleSender().sendMessage("--> That's a null");
 
@@ -155,7 +178,17 @@ public class EventHandler implements Listener {
      */
     private boolean checkDamageable(EntityDamageByEntityEvent event, Player attacker, Player defender) {
     	// If global is true, cancel if override is false
-        if(plugin.getPvpEnabledGlobal()) {
+        if(plugin.getDuelManager().isPlayerDueling(attacker) || plugin.getDuelManager().isPlayerDueling(defender)) {
+            Duel duel = plugin.getDuelManager().getDuel(attacker, defender);
+            if(duel != null && duel.isDuelStarted()) {
+                return false;
+            } else {
+                attacker.sendMessage(ChatColor.YELLOW + "You or " + defender.getName() + " are in a duel!");
+                attacker.playSound(attacker.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f);
+                event.setCancelled(true);
+                return true;
+            }
+        } else if(plugin.getPvpEnabledGlobal()) {
             if(!plugin.getPvpEnabledOverride()) {
                 // PvP Forced disabled
                 attacker.sendMessage("PvP Is Disabled");

@@ -6,6 +6,9 @@ commands:
   pvp:
     description: "Set local, and global PvP settings."
     usage: /pvp
+  duel:
+    description:  ""
+    usage: /duel <target> [bet] [<item>] [count]
 permissions:
   customizable-combat.pvp.onoff:
     description: Gives access to /pvp <on/off>. Defaults to true
@@ -18,4 +21,7 @@ permissions:
     default: op
   customizable-combat.pvp.check:
     description: Gives acces to /pvp check [player]. Defaults to true
+    default: true
+  customizable-combat.duel:
+    description:  Gives access to the /duel command
     default: true

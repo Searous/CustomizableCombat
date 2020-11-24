@@ -6,7 +6,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import searous.customizableCombat.commands.CommandPvp;
+import searous.customizableCombat.commands.*;
+import searous.customizableCombat.duel.Duel;
+import searous.customizableCombat.duel.DuelManager;
 import searous.customizableCombat.utilities.ConfigUpdater;
 
 import java.io.File;
@@ -30,6 +32,8 @@ public final class CustomizableCombat extends JavaPlugin {
      * Contains the command executor for the /pvp command
      */
     private CommandPvp commandPvp = null;
+    
+    private DuelManager duelManager = null;
     
     // Strings
     private Strings strings = null;
@@ -110,9 +114,13 @@ public final class CustomizableCombat extends JavaPlugin {
         // Register commands
         commandPvp = new CommandPvp(this);
         this.getCommand(CommandPvp.LABEL).setExecutor(commandPvp);
+        getCommand(CommandDuel.LABEL).setExecutor(new CommandDuel(this));
         
         // Register Events
         this.getServer().getPluginManager().registerEvents(eventHandler, this);
+        
+        // Duel Manager
+        duelManager = new DuelManager(this);
         
         // Enabling finished
         this.getServer().getConsoleSender().sendMessage(strings.LOG_HEADER + "PvP Plugin Loaded!");
@@ -230,5 +238,9 @@ public final class CustomizableCombat extends JavaPlugin {
         worlds.set("global." + strings.CONFIG_PVP_GLOBAL_ENABLED, global);
         worlds.set("global." + strings.CONFIG_PVP_GLOBAL_OVERRIDE, override);
         saveWorldsConfig();
+    }
+    
+    public DuelManager getDuelManager() {
+        return duelManager;
     }
 }

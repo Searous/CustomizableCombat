@@ -1,33 +1,50 @@
 
-# The name of the pvp command
-# Default: pvp
-pvp-command-label: pvp
+# NOTE: Note Implemented!!
+commands:
+  # The name of the pvp command
+  # Default: pvp
+  pvp-command-label: pvp
+  # The name fo the duel command
+  # Default: duel
+  duel-command-label: duel
 
-# Enable or disable pet protection. Protects a player's pets from
-# other players if they can't engage in PvP.
-# Default: true
-pet-protection: true
-# List of all pets protected.
-# Default: Wolf, Cat, Parrot
-# Supported: Wolf, Cat, Parrot, Horse, Donkey, Mule, Skeleton Horse
-protected-pets:
-  - Wolf
-  - Cat
-  - Parrot
+mob-protection:
+  # Enable or disable pet protection. Protects a player's pets from
+  # other players if they can't engage in PvP.
+  # Default: true
+  pet-protection: true
+  # List of all pets protected.
+  # Default: Wolf, Cat, Parrot
+  # Supported: Wolf, Cat, Parrot, Horse, Donkey, Mule, Skeleton Horse
+  protected-pets:
+    - Wolf
+    - Cat
+    - Parrot
 
-# Enabled or disable mount protection. Protects the mob a player
-# is riding if they can't engage in PvP.
-# Default: true
-mount-protection: true
-# List of all mounts protected.
-# Default: Horse, Donkey, Skeleton Horse, Mule, Skeleton Horse, Pig Strider
-# Supported: Horse, Donkey, Skeleton Horse, Mule, Skeleton Horse, Pig Strider
-protected-mounts:
-  - Horse
-  - Donkey
-  - Skeleton Horse
-  - Mule
-  - Llama
-  - Pig
-  - Strider
+  # Enabled or disable mount protection. Protects the mob a player
+  # is riding if they can't engage in PvP.
+  # Default: true
+  mount-protection: true
+  # List of all mounts protected.
+  # Default: Horse, Donkey, Skeleton Horse, Mule, Skeleton Horse, Pig Strider
+  # Supported: Horse, Donkey, Skeleton Horse, Mule, Skeleton Horse, Pig Strider
+  protected-mounts:
+    - Horse
+    - Donkey
+    - Skeleton Horse
+    - Mule
+    - Llama
+    - Pig
+    - Strider
 
+messages:
+  your-pvp-disabled: ""
+  their-pvp-disabled: ""
+  player-in-duel: ""
+  pvp-status: ""
+  pvp-global-status: ""
+  pvp-override-status: ""
+
+# DO NOT TOUCH
+# Marks the version of this config. The plugin will complain if it's incorrect
+config-version: 2

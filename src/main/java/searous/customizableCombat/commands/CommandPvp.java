@@ -25,7 +25,7 @@ public class CommandPvp implements TabExecutor {
         SUB_LABEL_CHECK     = "check",
         SUB_LABEL_LOCAL     = "players",
         SUB_LABEL_GLOBAL    = "global",
-
+        
         // Command Words
         ON  = "on",
         OFF = "off",
@@ -339,6 +339,7 @@ public class CommandPvp implements TabExecutor {
                     if(args.length == 3) {
                         list.add(ON);
                         list.add(OFF);
+                        list.add(CHECK);
 
                         argIndex = 2;
                     } else {
@@ -356,9 +357,11 @@ public class CommandPvp implements TabExecutor {
                         if(args[1].equalsIgnoreCase(ENABLED)) {
                             list.add(ON);
                             list.add(OFF);
+                            list.add(CHECK);
                         } else if(args[1].equalsIgnoreCase(OVERRIDE)) {
                             list.add(ON);
                             list.add(OFF);
+                            list.add(CHECK);
                         }
 
                         argIndex = 2;
