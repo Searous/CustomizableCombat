@@ -125,7 +125,7 @@ public class EventHandler implements Listener {
         if(o == null) {
             plugin.getServer().getConsoleSender().sendMessage("--> That's a null");
 
-            plugin.getPlayerPreferences().set(player.getName() + "." + plugin.getStrings().PREFERANCE_PVP, false);
+            plugin.getPlayerPreferences().set(player.getUniqueId().toString() + "." + plugin.getStrings().PREFERANCE_PVP, plugin.getWorldsConfig().getBoolean("global.pvp-default"));
             //plugin.saveConfig(plugin.filePlayers,);
         }
     }
@@ -199,12 +199,12 @@ public class EventHandler implements Listener {
             
             return false;
         } else {
-            if(!plugin.getPvpEnabled(defender.getName())) {
+            if(!plugin.getPvpEnabled(defender.getUniqueId())) {
                 attacker.sendMessage(ChatColor.YELLOW + defender.getName() + "'s PvP is disabled!");
                 attacker.playSound(attacker.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f);
                 event.setCancelled(true);
                 return true;
-            } else if(!plugin.getPvpEnabled(attacker.getName())) {
+            } else if(!plugin.getPvpEnabled(attacker.getUniqueId())) {
                 attacker.sendMessage(ChatColor.YELLOW + "Your PvP is disabled!");
                 attacker.playSound(attacker.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f);
                 event.setCancelled(true);

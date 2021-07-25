@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 
 /**
@@ -191,11 +192,11 @@ public final class CustomizableCombat extends JavaPlugin {
     /**
      * Gets weather or not the given player has PvP enabled
      *
-     * @param name The name of the player to check
+     * @param playerId The UUID of the player to check
      * @return Given player's PvP preference as shown in the player preferences file players.yml
      */
-    public boolean getPvpEnabled(String name) {
-        return players.getBoolean(name + "." + strings.PREFERANCE_PVP);
+    public boolean getPvpEnabled(UUID playerId) {
+        return players.getBoolean(playerId.toString() + "." + strings.PREFERANCE_PVP);
     }
     
     /**
@@ -217,11 +218,11 @@ public final class CustomizableCombat extends JavaPlugin {
     /**
      * Sets the given player's PvP state
      *
-     * @param name Name of the player
+     * @param playerId The UUID of the target player
      * @param enabled New PvP state
      */
-    public void setPvpEnabled(String name, boolean enabled) {
-        players.set(name + "." + strings.PREFERANCE_PVP, enabled);
+    public void setPvpEnabled(UUID playerId, boolean enabled) {
+        players.set(playerId.toString() + "." + strings.PREFERANCE_PVP, enabled);
     }
     
     public FileConfiguration getWorldsConfig() {

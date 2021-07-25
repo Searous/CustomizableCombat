@@ -11,6 +11,7 @@ import searous.customizableCombat.main.CustomizableCombat;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  *
@@ -43,11 +44,11 @@ public class CommandPvp implements TabExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         // Get list of players who have played on the server
         OfflinePlayer[] op = plugin.getServer().getOfflinePlayers();
-
+        
         // List of player names
-        List<String> players = new ArrayList<>();
+        List<UUID> players = new ArrayList<>();
         for(OfflinePlayer offlinePlayer : op) {
-            players.add(offlinePlayer.getName());
+            players.add(offlinePlayer.getUniqueId());
         }
 
         // Parse Command
@@ -60,7 +61,7 @@ public class CommandPvp implements TabExecutor {
                     //region Quick enable
                     if(sender.hasPermission(plugin.getStrings().PERM_PVP)) {
                         if(sender instanceof Player) {
-                            plugin.setPvpEnabled(sender.getName(), true);
+                            plugin.setPvpEnabled(((Player) sender).getUniqueId(), true);
                             sender.sendMessage(ChatColor.YELLOW + "Your PvP was updated to: " + ChatColor.AQUA + ON);
                         } else {
                             // Sender is not a player
@@ -76,7 +77,7 @@ public class CommandPvp implements TabExecutor {
     
                     if(sender.hasPermission(plugin.getStrings().PERM_PVP)) {
                         if(sender instanceof Player) {
-                            plugin.setPvpEnabled(sender.getName(), false);
+                            plugin.setPvpEnabled(((Player) sender).getUniqueId(), false);
                             sender.sendMessage(ChatColor.YELLOW + "Your PvP was updated to: " + ChatColor.AQUA + OFF);
                         } else {
                             // Sender is not a player
@@ -98,7 +99,7 @@ public class CommandPvp implements TabExecutor {
                             // Check if player has played
                             if(plugin.getPlayerPreferences().get(args[1]) != null) {
                                 // Player has played before
-                                if(plugin.getPvpEnabled(args[1])) {
+                                if(plugin.getPvpEnabled(plugin.getServer().getPlayer(args[1]).getUniqueId())) {
                                     sender.sendMessage(ChatColor.YELLOW + args[1] + "'s PvP is: " + ChatColor.AQUA + ON);
                                 } else {
                                     sender.sendMessage(ChatColor.YELLOW + args[1] + "'s PvP is: " + ChatColor.AQUA + OFF);
@@ -111,7 +112,7 @@ public class CommandPvp implements TabExecutor {
                             // Player Not Specified
                             if(sender instanceof Player) {
                                 // Sender is a player, tell them their PvP state
-                                if(plugin.getPvpEnabled(sender.getName())) {
+                                if(plugin.getPvpEnabled(((Player) sender).getUniqueId())) {
                                     sender.sendMessage(ChatColor.YELLOW + "Your PvP is: " + ChatColor.AQUA + ON);
                                 } else {
                                     sender.sendMessage(ChatColor.YELLOW + "Your PvP is: " + ChatColor.AQUA + OFF);
@@ -139,15 +140,16 @@ public class CommandPvp implements TabExecutor {
                             // Name and state to use
                             String name  = args[1];
                             String state = args[2];
-        
+                            UUID uuid = ((Player)sender).getUniqueId();
+                            
                             // Check if player has joined before
-                            if(players.contains(name)) {
+                            if(players.contains(uuid)) {
                                 // Player has joined
             
                                 // Check if setting to on or off
                                 if(state.equalsIgnoreCase(ON)) {
                                     // Set to on
-                                    plugin.setPvpEnabled(name, true);
+                                    plugin.setPvpEnabled(uuid, true);
                 
                                     // Tell the sender the given player's PvP was updated
                                     if(!name.equals(sender.getName())) {
@@ -163,7 +165,7 @@ public class CommandPvp implements TabExecutor {
                                     }
                                 } else if(state.equalsIgnoreCase(OFF)) {
                                     // Set of off
-                                    plugin.setPvpEnabled(name, false);
+                                    plugin.setPvpEnabled(uuid, false);
                 
                                     // Tell the sender the given player's PvP was updated
                                     if(!name.equals(sender.getName())) {

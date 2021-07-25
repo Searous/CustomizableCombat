@@ -4,7 +4,7 @@ commands:
   # The name of the pvp command
   # Default: pvp
   pvp-command-label: pvp
-  # The name fo the duel command
+  # The name of the duel command
   # Default: duel
   duel-command-label: duel
 
@@ -26,8 +26,8 @@ mob-protection:
   # Default: true
   mount-protection: true
   # List of all mounts protected.
-  # Default: Horse, Donkey, Skeleton Horse, Mule, Skeleton Horse, Pig Strider
-  # Supported: Horse, Donkey, Skeleton Horse, Mule, Skeleton Horse, Pig Strider
+  # Default: Horse, Donkey, Skeleton Horse, Mule, Skeleton Horse, Pig, Strider
+  # Supported: Horse, Donkey, Skeleton Horse, Mule, Skeleton Horse, Pig, Strider
   protected-mounts:
     - Horse
     - Donkey
@@ -37,14 +37,19 @@ mob-protection:
     - Pig
     - Strider
 
+# NOTE: Not Implemented
+# Set the different messages
+# As of right now, does not support
+# placeholder api
 messages:
-  your-pvp-disabled: ""
-  their-pvp-disabled: ""
-  player-in-duel: ""
-  pvp-status: ""
-  pvp-global-status: ""
-  pvp-override-status: ""
+  your-pvp-disabled: "&eYour PvP is disabled"
+  your-pvp-updated: "&eYour PvP has been set to: &b{status}"
+  their-pvp-disabled: "&e{player}'s PvP is disabled"
+  player-in-duel: "&eIF YOU SEE THIS SCREAM AT THE ADMINS"
+  pvp-status: "&eYour PvP is set to: &b{status}"
+  pvp-global-status: "Global override is &b{status}"
+  pvp-override-status: "Global override will override PvP with: &b{status}"
 
 # DO NOT TOUCH
 # Marks the version of this config. The plugin will complain if it's incorrect
-config-version: 2
+config-version: 3

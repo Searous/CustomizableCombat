@@ -1,7 +1,7 @@
 name: "CustomizableCombat"
-version: "1.1"
+version: "2.0"
 main: searous.customizableCombat.main.CustomizableCombat
-api-version: "1.16"
+api-version: "1.17"
 commands:
   pvp:
     description: "Set local, and global PvP settings."
