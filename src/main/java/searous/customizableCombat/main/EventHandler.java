@@ -68,7 +68,11 @@ public class EventHandler implements Listener {
                     if(((Player) defender).getHealth() - event.getDamage() <= 0d) {
                         plugin.getDuelManager().cancelDuel(duel);
                         ((Player) attacker).setHealth(((Player) attacker).getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+                        attacker.sendMessage(ChatColor.YELLOW + "You won the duel!");
+                        
                         ((Player) defender).setHealth(((Player) defender).getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+                        defender.sendMessage(ChatColor.YELLOW + "You lost the duel!");
+                        
                         event.setCancelled(true);
                         return;
                     }

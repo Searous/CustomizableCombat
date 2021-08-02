@@ -121,6 +121,7 @@ public final class CustomizableCombat extends JavaPlugin {
         //getCommand(CommandDuel.LABEL).setExecutor(new CommandDuel(this));
         commandManager = new BukkitCommandManager(this);
         commandManager.registerCommand(new ACFCommandPvp(this));
+        commandManager.registerCommand(new ACFCommandDuel(this));
         
         // Register Events
         this.getServer().getPluginManager().registerEvents(eventHandler, this);

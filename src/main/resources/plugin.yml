@@ -1,11 +1,7 @@
 name: "CustomizableCombat"
-version: "2.0"
+version: "2.1"
 main: searous.customizableCombat.main.CustomizableCombat
 api-version: "1.17"
-commands:
-  duel:
-    description:  ""
-    usage: /duel <target> [bet] [<item>] [count]
 permissions:
   customizable-combat.pvp:
     description: Gives access to /pvp <on/off>. Defaults to true
