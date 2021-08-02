@@ -16,6 +16,7 @@ import org.bukkit.scoreboard.ScoreboardManager;
 import searous.customizableCombat.duel.Duel;
 
 import java.util.*;
+import java.util.logging.Level;
 
 /**
  *
@@ -120,10 +121,10 @@ public class EventHandler implements Listener {
     @org.bukkit.event.EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        Object o = plugin.getPlayerPreferences().get(player.getName());
+        Object o = plugin.getPlayerPreferences().get(player.getUniqueId().toString());
         
         if(o == null) {
-            plugin.getServer().getConsoleSender().sendMessage("--> That's a null");
+            plugin.getLogger().log(Level.INFO, "Setting default player preferences for new player");
 
             plugin.getPlayerPreferences().set(player.getUniqueId().toString() + "." + plugin.getStrings().PREFERANCE_PVP, plugin.getWorldsConfig().getBoolean("global.pvp-default"));
             //plugin.saveConfig(plugin.filePlayers,);

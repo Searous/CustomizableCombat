@@ -1,13 +1,14 @@
 package searous.customizableCombat.main;
 
-import org.bukkit.World;
+import co.aikar.commands.BukkitCommandManager;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import searous.customizableCombat.commands.*;
-import searous.customizableCombat.duel.Duel;
 import searous.customizableCombat.duel.DuelManager;
 import searous.customizableCombat.utilities.ConfigUpdater;
 
@@ -51,6 +52,8 @@ public final class CustomizableCombat extends JavaPlugin {
     
     private File fileWorlds = null;
     private FileConfiguration worlds = null;
+    
+    public BukkitCommandManager commandManager;
     
     @Override
     public void onEnable() {
@@ -113,9 +116,11 @@ public final class CustomizableCombat extends JavaPlugin {
         eventHandler = new EventHandler(this);
         
         // Register commands
-        commandPvp = new CommandPvp(this);
-        this.getCommand(CommandPvp.LABEL).setExecutor(commandPvp);
-        getCommand(CommandDuel.LABEL).setExecutor(new CommandDuel(this));
+        //commandPvp = new CommandPvp(this);
+        //this.getCommand(CommandPvp.LABEL).setExecutor(commandPvp);
+        //getCommand(CommandDuel.LABEL).setExecutor(new CommandDuel(this));
+        commandManager = new BukkitCommandManager(this);
+        commandManager.registerCommand(new ACFCommandPvp(this));
         
         // Register Events
         this.getServer().getPluginManager().registerEvents(eventHandler, this);
@@ -244,4 +249,9 @@ public final class CustomizableCombat extends JavaPlugin {
     public DuelManager getDuelManager() {
         return duelManager;
     }
+    
+    public String setPlaceholders(Player player, boolean status, String message) {
+        return "";
+    }
 }
+
