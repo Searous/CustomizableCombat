@@ -14,6 +14,12 @@ public class DuelManager {
         this.plugin = plugin;
     }
     
+    /**
+     * Gets an ongoing duel between two players
+     * @param player1 challenger
+     * @param player2 challengee
+     * @return The current duel between player1 and player2, or null if no duel exists
+     */
     public Duel getDuel(Player player1, Player player2) {
         for(Duel duel : activeDuels) {
             if(duel.getChallenger().equals(player1) && duel.getChallenged().equals(player2)) {
@@ -23,6 +29,24 @@ public class DuelManager {
             }
         }
         return null;
+    }
+    
+    /**
+     * Gets all duels the specified player is registered in, including duels that have not started yet.
+     * @param player The player to look for
+     * @return An ArrayList containing every duel the specified player is a part of
+     */
+    public ArrayList<Duel> getDuels(Player player) {
+        ArrayList<Duel> duels = new ArrayList<>();
+        for(Duel duel : activeDuels) {
+            try {
+                if(duel.getChallenger().getUniqueId().equals((player.getUniqueId()))
+                    || duel.getChallenged().getUniqueId().equals((player.getUniqueId()))) {
+                    duels.add(duel);
+                }
+            } catch(Exception ignored) { }
+        }
+        return duels;
     }
     
     public Duel challenge(Player challenger, Player challenged) {
@@ -43,6 +67,11 @@ public class DuelManager {
         duel.startDuel();
     }
     
+    /**
+     * Check if the specified player is dueling
+     * @param player
+     * @return
+     */
     public boolean isPlayerDueling(Player player) {
         for(Duel duel : activeDuels) {
             if(duel.isDuelStarted()) {

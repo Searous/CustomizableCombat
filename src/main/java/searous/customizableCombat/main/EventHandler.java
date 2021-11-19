@@ -196,7 +196,7 @@ public class EventHandler implements Listener {
         } else if(plugin.getPvpEnabledGlobal()) {
             if(!plugin.getPvpEnabledOverride()) {
                 // PvP Forced disabled
-                attacker.sendMessage("PvP Is Disabled");
+                attacker.sendMessage(ChatColor.YELLOW + "PvP Is Disabled");
                 attacker.playSound(attacker.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f);
                 event.setCancelled(true);
                 return true;

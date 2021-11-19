@@ -75,12 +75,24 @@ public class ACFCommandPvp extends BaseCommand {
     @CommandPermission("customizable-combat.pvp.override.set")
     public static void onOverrideSet(CommandSender sender, boolean value) {
         plugin.setPvpEnabledGlobal(plugin.getPvpEnabledGlobal(), value);
+    
+        boolean override = plugin.getPvpEnabledOverride();
+        if(override)
+            sender.sendMessage(ChatColor.YELLOW + "PvP override set to " + ChatColor.AQUA + "on");
+        else
+            sender.sendMessage(ChatColor.YELLOW + "PvP override set to " + ChatColor.AQUA + "off");
     }
     @Subcommand("override enabled")
     @CommandCompletion("on|ture|off|false")
     @CommandPermission("customizable-combat.pvp.override.set")
     public static void onOverrideEnabledSet(CommandSender sender, boolean value) {
         plugin.setPvpEnabledGlobal(value, plugin.getPvpEnabledOverride());
+        
+        boolean override = plugin.getPvpEnabledGlobal();
+        if(override)
+            sender.sendMessage(ChatColor.YELLOW + "PvP override " + ChatColor.AQUA + "enabled");
+        else
+            sender.sendMessage(ChatColor.YELLOW + "PvP override " + ChatColor.AQUA + "disabled");
     }
     
     @Subcommand("override check")

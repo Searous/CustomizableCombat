@@ -1,5 +1,5 @@
 name: "CustomizableCombat"
-version: "2.1"
+version: ${project.version}
 main: searous.customizableCombat.main.CustomizableCombat
 api-version: "1.17"
 permissions:
@@ -13,7 +13,7 @@ permissions:
     description: Allows access to setting the override settings
     default: op
   customizable-combat.pvp.override.check:
-    description: Allows access to setting the override settings
+    description: Allows access to checking the override settings
     default: op
   customizable-combat.pvp.check:
     description: Gives acces to /pvp check <player>. Defaults to true

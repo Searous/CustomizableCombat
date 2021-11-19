@@ -24,27 +24,32 @@ public class ACFCommandDuel extends BaseCommand {
     @Default
     @CommandCompletion("@players")
     public static void onDuel(Player player, String target) {
-        Player t = plugin.getServer().getPlayer(target);
-        if(t == null) {
+        Player targetPlayer = plugin.getServer().getPlayer(target);
+        if(targetPlayer == null) {
             player.sendMessage(ChatColor.RED + "Unable to locate target '" + target + "'");
             return;
         }
         
         // Attempted self-duel
-        if(t.equals(player)) {
+        if(targetPlayer.equals(player)) {
             player.sendMessage(ChatColor.YELLOW + "You can't duel yourself, silly!");
             return;
         }
         
+        // Attempting to challenge a player already in a duel
+        if(plugin.getDuelManager().isPlayerDueling(targetPlayer)) {
+            player.sendMessage(ChatColor.YELLOW + targetPlayer.getName() + " is already dueling@");
+        }
+        
         // Challenge / Accept
-        if(plugin.getDuelManager().isPlayerDueling(t)) {
-            player.sendMessage(ChatColor.YELLOW + "You accepted " + t.getName() + "'s challenge! ");
-            t.sendMessage(ChatColor.YELLOW + player.getName() + "accepted your challenge!");
+        if(plugin.getDuelManager().getDuel(targetPlayer, player) != null) {
+            player.sendMessage(ChatColor.YELLOW + "You accepted " + targetPlayer.getName() + "'s challenge!");
+            targetPlayer.sendMessage(ChatColor.YELLOW + player.getName() + " accepted your challenge!");
         } else {
-            player.sendMessage(ChatColor.YELLOW + "You challenged " + t.getName() + " to a duel!");
-            t.sendMessage(ChatColor.YELLOW + player.getName() + " challenged you to a duel! Type '/duel " + player.getName() + "' to accept!");
+            player.sendMessage(ChatColor.YELLOW + "You challenged " + targetPlayer.getName() + " to a duel!");
+            targetPlayer.sendMessage(ChatColor.YELLOW + player.getName() + " challenged you to a duel! Type '/duel " + player.getName() + "' to accept!");
         }
     
-        plugin.getDuelManager().challenge(player, t);
+        plugin.getDuelManager().challenge(player, targetPlayer);
     }
 }
