@@ -33,7 +33,7 @@ public final class CustomizableCombat extends JavaPlugin {
     /**
      * Contains the command executor for the /pvp command
      */
-    private CommandPvp commandPvp = null;
+    //private CommandPvp commandPvp = null;
     
     private DuelManager duelManager = null;
     
@@ -52,6 +52,9 @@ public final class CustomizableCombat extends JavaPlugin {
     
     private File fileWorlds = null;
     private FileConfiguration worlds = null;
+    
+    private File fileMessages = null;
+    private FileConfiguration messages = null;
     
     public BukkitCommandManager commandManager;
     
@@ -110,6 +113,11 @@ public final class CustomizableCombat extends JavaPlugin {
         worlds.options().copyDefaults(true);
         saveWorldsConfig();
     
+        fileMessages = new File(this.getDataFolder(), "messages.yml");
+        messages = YamlConfiguration.loadConfiguration(fileMessages);
+        messages.options().copyDefaults(true);
+        saveWorldsConfig();
+        
         this.getServer().getConsoleSender().sendMessage(strings.LOG_HEADER + "All configs loaded!");
         
         // Create event handler
@@ -155,12 +163,6 @@ public final class CustomizableCombat extends JavaPlugin {
      * @return Instance of {@link EventHandler}
      */
     public Listener getEventHandler() { return eventHandler; }
-    /**
-     * Gets the {@link CommandExecutor} associated with the "/pvp" command
-     *
-     * @return Instance of {@link CommandPvp}
-     */
-    public CommandExecutor getCommandPvp() { return commandPvp; }
     /**
      * Gets the {@link FileConfiguration} containing the player preferences config players.yml
      *
@@ -234,6 +236,7 @@ public final class CustomizableCombat extends JavaPlugin {
     public FileConfiguration getWorldsConfig() {
         return worlds;
     }
+    public FileConfiguration getMessagesConfig() { return messages; }
     
     /**
      * Sets both global, and global override settings. May change in the future

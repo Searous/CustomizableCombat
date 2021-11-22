@@ -1,0 +1,77 @@
+chat-prefix: ''
+use-placeholder-api: false
+message-not-found: 'No message found: %key%'
+
+words:
+  on: 'on'
+  off: 'off'
+
+messages:
+  pvp:
+    command:
+      set-self: '&eYour PvP has been set to: %value%'
+      set-other: '&e%target%''s PvP has been set to: %value%'
+      check: '&e%target%''s PvP is set to: %value%'
+      override:
+        set: 'PvP override set to: %value%'
+        check: 'PvP override is set to: %value%'
+        enabled: 'PvP override is now: %value%'
+        enabled-check: 'PvP override is: %value%'
+    player:
+      inform-disabled:
+        value: '&ePvP is disabled!'
+        sound:
+          enabled: true
+          sound: BLOCK_NOTE_BLOCK_PLING
+          volume: 1.0
+          pitch: 1.0
+      inform-target-pvp-disabled:
+        value: '&e%defender%''s PvP is disabled!'
+        sound:
+          enabled: true
+          sound: BLOCK_NOTE_BLOCK_PLING
+          volume: 1.0
+          pitch: 1.0
+      inform-self-pvp-disabled:
+        value: '&eYour PvP is disabled!'
+        sound:
+          enabled: true
+          sound: BLOCK_NOTE_BLOCK_PLING
+          volume: 1.0
+          pitch: 1.0
+  duel:
+    command:
+      invalid-target: 'Unable to locate player ''%target%'''
+      attempt-duel-self: '&eYou can''t duel yourself, silly!'
+      attempt-duel-target-already-dueling: '&e%target% is already ina duel!'
+      challenge: '&eYou challenged %target% to a duel!'
+      inform-challenged:
+        value: '&e%target% challenged you to a duel! Type /duel %player% to accept!'
+          sound:
+            enabled: false
+            sound: BLOCK_NOTE_BLOCK_PLING
+            volume: 1.0
+            pitch: 1.0
+      accept: 'You accepted %target%''s challenge!'
+      inform-accepted:
+        value: '&e%target% accepted your challenge!'
+          sound:
+            enabled: false
+            sound: BLOCK_NOTE_BLOCK_PLING
+            volume: 1.0
+            pitch: 1.0
+    player:
+      win:
+        value: '&eYou won the duel!'
+          sound:
+            enabled: false
+            sound: BLOCK_NOTE_BLOCK_PLING
+            volume: 1.0
+            pitch: 1.0
+      lose:
+        value: '&eYou lost the duel!'
+          sound:
+            enabled: false
+            sound: BLOCK_NOTE_BLOCK_PLING
+            volume: 1.0
+            pitch: 1.0

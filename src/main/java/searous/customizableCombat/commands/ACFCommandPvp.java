@@ -44,9 +44,9 @@ public class ACFCommandPvp extends BaseCommand {
         
         plugin.setPvpEnabled(player.getUniqueId(), value);
         if(value)
-            player.sendMessage(ChatColor.YELLOW + "Your PvP has been set to: " + ChatColor.AQUA + "on");
+            player.sendMessage(ChatColor.YELLOW + player.getName() + "'s PvP was set to: " + ChatColor.AQUA + "on");
         else
-            player.sendMessage(ChatColor.YELLOW + "Your PvP has been set to: " + ChatColor.AQUA + "off");
+            player.sendMessage(ChatColor.YELLOW + player.getName() + "'s PvP was set to: " + ChatColor.AQUA + "off");
     }
     
     @Subcommand("check|c")
