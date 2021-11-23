@@ -1,8 +1,6 @@
 package searous.customizableCombat.main;
 
 import co.aikar.commands.BukkitCommandManager;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -10,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import searous.customizableCombat.commands.*;
 import searous.customizableCombat.duel.DuelManager;
+import searous.customizableCombat.messages.MessageHandler;
 import searous.customizableCombat.utilities.ConfigUpdater;
 
 import java.io.File;
@@ -34,6 +33,7 @@ public final class CustomizableCombat extends JavaPlugin {
      * Contains the command executor for the /pvp command
      */
     //private CommandPvp commandPvp = null;
+    private MessageHandler messageHandler;
     
     private DuelManager duelManager = null;
     
@@ -64,72 +64,25 @@ public final class CustomizableCombat extends JavaPlugin {
         strings = new Strings(this);
         
         // Config
-        //this.getConfig().options().copyDefaults(true);
-        //this.saveConfig();
-        this.saveDefaultConfig();
-        File configFile = new File(getDataFolder(), "config.yml");
-        
-        try {
-            ConfigUpdater.update(this, "config.yml", configFile, Arrays.asList());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        
-        reloadConfig();
-        
         this.getServer().getConsoleSender().sendMessage(strings.LOG_HEADER + "Loading configs...");
-    
-        List<String> pets = getConfig().getStringList(strings.CONFIG_PROTECTED_PETS);
-        for(int i = 0; i < pets.size(); i++) {
-            String entry = pets.get(i);
-            
-            entry = entry.toUpperCase();
-            entry = entry.trim();
-            entry = entry.replace(' ', '_');
-            
-            pets.set(i, entry);
-        }
-        getConfig().set(strings.CONFIG_PROTECTED_PETS, pets);
-        
-        List<String> mounts = getConfig().getStringList(strings.CONFIG_PROTECTED_MOUNTS);
-        for(int i = 0; i < mounts.size(); i++) {
-            String entry = mounts.get(i);
-        
-            entry = entry.toUpperCase();
-            entry = entry.trim();
-            entry = entry.replace(' ', '_');
-            
-            mounts.set(i, entry);
-        }
-        getConfig().set(strings.CONFIG_PROTECTED_MOUNTS, mounts);
-    
-        filePlayers = new File(this.getDataFolder(), "players.yml");
-        players = YamlConfiguration.loadConfiguration(filePlayers);
-        players.options().copyDefaults(true);
-        savePlayersConfig();
-    
-        fileWorlds = new File(this.getDataFolder(), "worlds.yml");
-        worlds = YamlConfiguration.loadConfiguration(fileWorlds);
-        worlds.options().copyDefaults(true);
-        saveWorldsConfig();
-    
-        fileMessages = new File(this.getDataFolder(), "messages.yml");
-        messages = YamlConfiguration.loadConfiguration(fileMessages);
-        messages.options().copyDefaults(true);
-        saveWorldsConfig();
-        
+        reloadConfig();
         this.getServer().getConsoleSender().sendMessage(strings.LOG_HEADER + "All configs loaded!");
         
         // Create event handler
         eventHandler = new EventHandler(this);
+        
+        // Create message handler
+        messageHandler = new MessageHandler(this);
         
         // Register commands
         //commandPvp = new CommandPvp(this);
         //this.getCommand(CommandPvp.LABEL).setExecutor(commandPvp);
         //getCommand(CommandDuel.LABEL).setExecutor(new CommandDuel(this));
         commandManager = new BukkitCommandManager(this);
+        commandManager.registerCommand(new ACFCommandCustomizableCombat(this));
         commandManager.registerCommand(new ACFCommandPvp(this));
         commandManager.registerCommand(new ACFCommandDuel(this));
+        commandManager.registerCommand(new ACFCommandTest(this));
         
         // Register Events
         this.getServer().getPluginManager().registerEvents(eventHandler, this);
@@ -154,6 +107,59 @@ public final class CustomizableCombat extends JavaPlugin {
         
         // Plugin disable complete
         this.getLogger().log(Level.INFO, strings.LOG_HEADER + "Plugin disabling complete");
+    }
+    
+    @Override
+    public void reloadConfig() {
+        this.saveDefaultConfig();
+        File configFile = new File(getDataFolder(), "config.yml");
+    
+        try {
+            ConfigUpdater.update(this, "config.yml", configFile, Arrays.asList());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    
+        super.reloadConfig();
+    
+        List<String> pets = getConfig().getStringList(strings.CONFIG_PROTECTED_PETS);
+        for(int i = 0; i < pets.size(); i++) {
+            String entry = pets.get(i);
+        
+            entry = entry.toUpperCase();
+            entry = entry.trim();
+            entry = entry.replace(' ', '_');
+        
+            pets.set(i, entry);
+        }
+        getConfig().set(strings.CONFIG_PROTECTED_PETS, pets);
+    
+        List<String> mounts = getConfig().getStringList(strings.CONFIG_PROTECTED_MOUNTS);
+        for(int i = 0; i < mounts.size(); i++) {
+            String entry = mounts.get(i);
+        
+            entry = entry.toUpperCase();
+            entry = entry.trim();
+            entry = entry.replace(' ', '_');
+        
+            mounts.set(i, entry);
+        }
+        getConfig().set(strings.CONFIG_PROTECTED_MOUNTS, mounts);
+    
+        filePlayers = new File(this.getDataFolder(), "players.yml");
+        players = YamlConfiguration.loadConfiguration(filePlayers);
+        players.options().copyDefaults(true);
+        savePlayersConfig();
+    
+        fileWorlds = new File(this.getDataFolder(), "worlds.yml");
+        worlds = YamlConfiguration.loadConfiguration(fileWorlds);
+        worlds.options().copyDefaults(true);
+        saveWorldsConfig();
+        
+        fileMessages = new File(this.getDataFolder(), "messages.yml");
+        messages = YamlConfiguration.loadConfiguration(fileMessages);
+        messages.options().copyDefaults(true);
+        saveMessagesConfig();
     }
     
     // Getters
@@ -187,7 +193,6 @@ public final class CustomizableCombat extends JavaPlugin {
             this.getLogger().log(Level.SEVERE, strings.LOG_HEADER + "Could not save player preferences config to " + filePlayers, ex);
         }
     }
-    
     public void saveWorldsConfig() {
         try {
             worlds.save(fileWorlds);
@@ -195,7 +200,15 @@ public final class CustomizableCombat extends JavaPlugin {
             this.getLogger().log(Level.SEVERE, strings.LOG_HEADER + "Could not save worlds config to " + filePlayers, ex);
         }
     }
-    
+    public void saveMessagesConfig() {
+        File configFile = new File(getDataFolder(), "messages.yml");
+        
+        try {
+            ConfigUpdater.update(this, "messages.yml", configFile, Arrays.asList());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     
     /**
      * Gets weather or not the given player has PvP enabled
@@ -254,8 +267,8 @@ public final class CustomizableCombat extends JavaPlugin {
         return duelManager;
     }
     
-    public String setPlaceholders(Player player, boolean status, String message) {
-        return "";
+    public MessageHandler getMessageHandler() {
+        return messageHandler;
     }
 }
 

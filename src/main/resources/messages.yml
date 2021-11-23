@@ -7,6 +7,8 @@ words:
   off: 'off'
 
 messages:
+  test: 'This is a message'
+
   pvp:
     command:
       set-self: '&eYour PvP has been set to: %value%'
@@ -47,31 +49,31 @@ messages:
       challenge: '&eYou challenged %target% to a duel!'
       inform-challenged:
         value: '&e%target% challenged you to a duel! Type /duel %player% to accept!'
-          sound:
-            enabled: false
-            sound: BLOCK_NOTE_BLOCK_PLING
-            volume: 1.0
-            pitch: 1.0
+        sound:
+          enabled: false
+          sound: BLOCK_NOTE_BLOCK_PLING
+          volume: 1.0
+          pitch: 1.0
       accept: 'You accepted %target%''s challenge!'
       inform-accepted:
         value: '&e%target% accepted your challenge!'
-          sound:
-            enabled: false
-            sound: BLOCK_NOTE_BLOCK_PLING
-            volume: 1.0
-            pitch: 1.0
+        sound:
+          enabled: false
+          sound: BLOCK_NOTE_BLOCK_PLING
+          volume: 1.0
+          pitch: 1.0
     player:
       win:
         value: '&eYou won the duel!'
-          sound:
-            enabled: false
-            sound: BLOCK_NOTE_BLOCK_PLING
-            volume: 1.0
-            pitch: 1.0
+        sound:
+          enabled: false
+          sound: BLOCK_NOTE_BLOCK_PLING
+          volume: 1.0
+          pitch: 1.0
       lose:
         value: '&eYou lost the duel!'
-          sound:
-            enabled: false
-            sound: BLOCK_NOTE_BLOCK_PLING
-            volume: 1.0
-            pitch: 1.0
+        sound:
+          enabled: false
+          sound: BLOCK_NOTE_BLOCK_PLING
+          volume: 1.0
+          pitch: 1.0
