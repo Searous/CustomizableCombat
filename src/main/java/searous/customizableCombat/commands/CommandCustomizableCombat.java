@@ -10,10 +10,10 @@ import searous.customizableCombat.main.CustomizableCombat;
 import java.util.logging.Level;
 
 @CommandAlias("customizablecombat")
-public class ACFCommandCustomizableCombat extends BaseCommand {
+public class CommandCustomizableCombat extends BaseCommand {
     private static CustomizableCombat plugin;
     
-    public ACFCommandCustomizableCombat(CustomizableCombat p) {
+    public CommandCustomizableCombat(CustomizableCombat p) {
         if(plugin != null)
             p.getLogger().log(Level.SEVERE, "Attempting to instantiate duplicate copy of Duel command");
         

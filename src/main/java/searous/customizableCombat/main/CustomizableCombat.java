@@ -3,7 +3,6 @@ package searous.customizableCombat.main;
 import co.aikar.commands.BukkitCommandManager;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import searous.customizableCombat.commands.*;
@@ -79,10 +78,10 @@ public final class CustomizableCombat extends JavaPlugin {
         //this.getCommand(CommandPvp.LABEL).setExecutor(commandPvp);
         //getCommand(CommandDuel.LABEL).setExecutor(new CommandDuel(this));
         commandManager = new BukkitCommandManager(this);
-        commandManager.registerCommand(new ACFCommandCustomizableCombat(this));
-        commandManager.registerCommand(new ACFCommandPvp(this));
-        commandManager.registerCommand(new ACFCommandDuel(this));
-        commandManager.registerCommand(new ACFCommandTest(this));
+        commandManager.registerCommand(new CommandCustomizableCombat(this));
+        commandManager.registerCommand(new CommandPvp(this));
+        commandManager.registerCommand(new CommandDuel(this));
+        commandManager.registerCommand(new CommandTest(this));
         
         // Register Events
         this.getServer().getPluginManager().registerEvents(eventHandler, this);
@@ -197,7 +196,7 @@ public final class CustomizableCombat extends JavaPlugin {
         try {
             worlds.save(fileWorlds);
         } catch (IOException ex) {
-            this.getLogger().log(Level.SEVERE, strings.LOG_HEADER + "Could not save worlds config to " + filePlayers, ex);
+            this.getLogger().log(Level.SEVERE, strings.LOG_HEADER + "Could not save worlds config to " + fileWorlds, ex);
         }
     }
     public void saveMessagesConfig() {

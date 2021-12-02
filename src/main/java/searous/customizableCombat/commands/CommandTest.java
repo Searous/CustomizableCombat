@@ -12,11 +12,11 @@ import searous.customizableCombat.messages.MessageContext;
 import java.util.logging.Level;
 
 @CommandAlias("test|t")
-public class ACFCommandTest extends BaseCommand {
+public class CommandTest extends BaseCommand {
     
     private static CustomizableCombat plugin;
     
-    public ACFCommandTest(CustomizableCombat p) {
+    public CommandTest(CustomizableCombat p) {
         if(plugin != null)
             p.getLogger().log(Level.SEVERE, "Attempting to instantiate duplicate copy of test command");
         

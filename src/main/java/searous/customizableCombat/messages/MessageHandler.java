@@ -1,13 +1,16 @@
 package searous.customizableCombat.messages;
 
+import me.clip.placeholderapi.PlaceholderAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import searous.customizableCombat.main.CustomizableCombat;
 
+import java.util.logging.Level;
+
 public class MessageHandler {
     
     private CustomizableCombat plugin;
-    private boolean usePlaceholderApi;
     private String noMessageFound;
     private String chatPrefix;
     
@@ -18,7 +21,6 @@ public class MessageHandler {
         
         // Fetch config
         FileConfiguration messages = plugin.getMessagesConfig();
-        usePlaceholderApi = messages.getBoolean("use-placeholder-api", false);
         noMessageFound = messages.getString("message-not-found", "No message found: %key%");
         chatPrefix = messages.getString("chat-prefix", "");
         
@@ -47,8 +49,9 @@ public class MessageHandler {
         output.text = parsePlaceholders(context, output.text);
         
         // Parse placeholder api placeholders
-        if(usePlaceholderApi) {
-            // TODO: Implement placeholder API
+        // NOTE: This may need to be adapted to check if placeholder api is enabled in the future
+        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null && plugin.getMessagesConfig().getBoolean("use-placeholder-api", false)) {
+            output.text = PlaceholderAPI.setPlaceholders(context.player, output.text);
         }
         
         // Return

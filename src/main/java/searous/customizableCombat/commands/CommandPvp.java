@@ -11,11 +11,11 @@ import java.util.logging.Level;
 
 @CommandAlias("pvp")
 @CommandPermission("customizable-combat.pvp")
-public class ACFCommandPvp extends BaseCommand {
+public class CommandPvp extends BaseCommand {
     
     private static CustomizableCombat plugin;
     
-    public ACFCommandPvp(CustomizableCombat p) {
+    public CommandPvp(CustomizableCombat p) {
         if(plugin != null)
             p.getLogger().log(Level.SEVERE, "Attempting to instantiate duplicate copy of PVP command");
         

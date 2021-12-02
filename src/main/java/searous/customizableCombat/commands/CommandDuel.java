@@ -10,11 +10,11 @@ import java.util.logging.Level;
 
 @CommandAlias("duel")
 @CommandPermission("customizable-combat.duel")
-public class ACFCommandDuel extends BaseCommand {
+public class CommandDuel extends BaseCommand {
     
     private static CustomizableCombat plugin;
     
-    public ACFCommandDuel(CustomizableCombat p) {
+    public CommandDuel(CustomizableCombat p) {
         if(plugin != null)
             p.getLogger().log(Level.SEVERE, "Attempting to instantiate duplicate copy of Duel command");
         

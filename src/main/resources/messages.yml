@@ -1,5 +1,5 @@
 chat-prefix: ''
-use-placeholder-api: false
+use-placeholder-api: true
 message-not-found: 'No message found: %key%'
 
 words:
@@ -77,3 +77,5 @@ messages:
           sound: BLOCK_NOTE_BLOCK_PLING
           volume: 1.0
           pitch: 1.0
+
+config-version: 1
