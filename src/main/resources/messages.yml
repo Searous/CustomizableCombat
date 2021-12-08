@@ -8,6 +8,7 @@ words:
 
 messages:
   test: 'This is a message'
+  cannot-find-target: 'Unable to locate player ''%special%'''
 
   pvp:
     command:
@@ -19,7 +20,6 @@ messages:
         check: 'PvP override is set to: %value%'
         enabled: 'PvP override is now: %value%'
         enabled-check: 'PvP override is: %value%'
-      cannot-find-target: 'Unable to locate player ''%special%'''
     player:
       inform-disabled:
         value: '&ePvP is disabled!'

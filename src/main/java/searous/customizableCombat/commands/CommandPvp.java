@@ -38,7 +38,7 @@ public class CommandPvp extends BaseCommand {
     public static void onSet(CommandSender sender, String target, boolean value) {
         Player player = plugin.getServer().getPlayer(target);
         if(player == null) {
-            MessageContext context = new MessageContext("messages.pvp.command.cannot-find-target", null)
+            MessageContext context = new MessageContext("messages.cannot-find-target", sender)
                 .setSpecial(target);
             plugin.getMessageHandler().sendMessage(context);
             return;
@@ -58,7 +58,7 @@ public class CommandPvp extends BaseCommand {
             if(sender instanceof Player) {
                 player = (Player) sender;
             } else {
-                MessageContext context = new MessageContext("messages.pvp.command.cannot-find-target", null)
+                MessageContext context = new MessageContext("messages.cannot-find-target", sender)
                     .setSpecial(target);
                 plugin.getMessageHandler().sendMessage(context);
                 return;
