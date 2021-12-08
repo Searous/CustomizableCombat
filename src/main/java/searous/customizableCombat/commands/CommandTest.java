@@ -30,7 +30,6 @@ public class CommandTest extends BaseCommand {
             path = "messages.test";
         }
         MessageContext context = new MessageContext(path, player);
-        context.player = player;
         plugin.getMessageHandler().sendMessage(context);
     }
 }

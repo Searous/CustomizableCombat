@@ -3,8 +3,8 @@ use-placeholder-api: true
 message-not-found: 'No message found: %key%'
 
 words:
-  on: 'on'
-  off: 'off'
+  true: 'on'
+  false: 'off'
 
 messages:
   test: 'This is a message'
@@ -19,6 +19,7 @@ messages:
         check: 'PvP override is set to: %value%'
         enabled: 'PvP override is now: %value%'
         enabled-check: 'PvP override is: %value%'
+      cannot-find-target: 'Unable to locate player ''%special%'''
     player:
       inform-disabled:
         value: '&ePvP is disabled!'

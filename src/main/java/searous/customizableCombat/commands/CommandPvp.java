@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import searous.customizableCombat.main.CustomizableCombat;
+import searous.customizableCombat.messages.MessageContext;
 
 import java.util.logging.Level;
 
@@ -26,11 +27,10 @@ public class CommandPvp extends BaseCommand {
     @CommandCompletion("on|true|off|false")
     public static void onSetSelf(Player player, boolean value) {
         plugin.setPvpEnabled(player.getUniqueId(), value);
-    
-        if(value)
-            player.sendMessage(ChatColor.YELLOW + "Your PvP has been set to: " + ChatColor.AQUA + "on");
-        else
-            player.sendMessage(ChatColor.YELLOW + "Your PvP has been set to: " + ChatColor.AQUA + "off");
+        
+        MessageContext context = new MessageContext("messages.pvp.command.set-self", player)
+            .setValue(value);
+        plugin.getMessageHandler().sendMessage(context);
     }
     @Subcommand("set|s")
     @CommandCompletion("@players on|true|off|false")
@@ -38,15 +38,15 @@ public class CommandPvp extends BaseCommand {
     public static void onSet(CommandSender sender, String target, boolean value) {
         Player player = plugin.getServer().getPlayer(target);
         if(player == null) {
-            sender.sendMessage(ChatColor.RED + "Unable to locate player '" + target + "'");
+            MessageContext context = new MessageContext("messages.pvp.command.cannot-find-target", null)
+                .setSpecial(target);
+            plugin.getMessageHandler().sendMessage(context);
             return;
         }
         
-        plugin.setPvpEnabled(player.getUniqueId(), value);
-        if(value)
-            player.sendMessage(ChatColor.YELLOW + player.getName() + "'s PvP was set to: " + ChatColor.AQUA + "on");
-        else
-            player.sendMessage(ChatColor.YELLOW + player.getName() + "'s PvP was set to: " + ChatColor.AQUA + "off");
+        MessageContext context = new MessageContext("messages.pvp.command.set-other", player)
+            .setValue(value);
+        plugin.getMessageHandler().sendMessage(context);
     }
     
     @Subcommand("check|c")
@@ -58,16 +58,17 @@ public class CommandPvp extends BaseCommand {
             if(sender instanceof Player) {
                 player = (Player) sender;
             } else {
-                sender.sendMessage(ChatColor.RED + "Unable to locate player '" + target + "'");
+                MessageContext context = new MessageContext("messages.pvp.command.cannot-find-target", null)
+                    .setSpecial(target);
+                plugin.getMessageHandler().sendMessage(context);
                 return;
             }
         }
         
         boolean value = plugin.getPvpEnabled(player.getUniqueId());
-        if(value)
-            sender.sendMessage(ChatColor.YELLOW + target+ "'s PvP is " + ChatColor.AQUA + "on");
-        else
-            sender.sendMessage(ChatColor.YELLOW + target+ "'s PvP is " + ChatColor.AQUA + "off");
+        MessageContext context = new MessageContext("messages.pvp.command.check", player)
+            .setValue(value);
+        plugin.getMessageHandler().sendMessage(context);
     }
     
     @Subcommand("override set")
@@ -77,10 +78,9 @@ public class CommandPvp extends BaseCommand {
         plugin.setPvpEnabledGlobal(plugin.getPvpEnabledGlobal(), value);
     
         boolean override = plugin.getPvpEnabledOverride();
-        if(override)
-            sender.sendMessage(ChatColor.YELLOW + "PvP override set to " + ChatColor.AQUA + "on");
-        else
-            sender.sendMessage(ChatColor.YELLOW + "PvP override set to " + ChatColor.AQUA + "off");
+        MessageContext context = new MessageContext("messages.pvp.command.override.set", sender)
+            .setValue(override);
+        plugin.getMessageHandler().sendMessage(context);
     }
     @Subcommand("override enabled")
     @CommandCompletion("on|ture|off|false")
@@ -89,28 +89,25 @@ public class CommandPvp extends BaseCommand {
         plugin.setPvpEnabledGlobal(value, plugin.getPvpEnabledOverride());
         
         boolean override = plugin.getPvpEnabledGlobal();
-        if(override)
-            sender.sendMessage(ChatColor.YELLOW + "PvP override " + ChatColor.AQUA + "enabled");
-        else
-            sender.sendMessage(ChatColor.YELLOW + "PvP override " + ChatColor.AQUA + "disabled");
+        MessageContext context = new MessageContext("messages.pvp.command.override.enabled", sender)
+            .setValue(override);
+        plugin.getMessageHandler().sendMessage(context);
     }
     
     @Subcommand("override check")
     @CommandPermission("customizable-combat.pvp.override.check")
     public static void onOverrideCheck(CommandSender sender) {
         boolean override = plugin.getPvpEnabledOverride();
-        if(override)
-            sender.sendMessage(ChatColor.YELLOW + "PvP override is set to " + ChatColor.AQUA + "on");
-        else
-            sender.sendMessage(ChatColor.YELLOW + "PvP override is set to " + ChatColor.AQUA + "off");
+        MessageContext context = new MessageContext("messages.pvp.command.override.check", sender)
+            .setValue(override);
+        plugin.getMessageHandler().sendMessage(context);
     }
     @Subcommand("override enabled check")
     @CommandPermission("customizable-combat.pvp.override.check")
     public static void onOverrideEnabledCheck(CommandSender sender) {
         boolean override = plugin.getPvpEnabledGlobal();
-        if(override)
-            sender.sendMessage(ChatColor.YELLOW + "PvP override is " + ChatColor.AQUA + "enabled");
-        else
-            sender.sendMessage(ChatColor.YELLOW + "PvP override is " + ChatColor.AQUA + "disabled");
+        MessageContext context = new MessageContext("messages.pvp.command.override.enabled-check", sender)
+            .setValue(override);
+        plugin.getMessageHandler().sendMessage(context);
     }
 }
