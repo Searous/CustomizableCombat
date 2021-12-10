@@ -7,7 +7,6 @@ words:
   false: 'off'
 
 messages:
-  test: 'This is a message'
   cannot-find-target: 'Unable to locate player ''%special%'''
 
   pvp:
@@ -44,9 +43,8 @@ messages:
           pitch: 1.0
   duel:
     command:
-      invalid-target: 'Unable to locate player ''%target%'''
       attempt-duel-self: '&eYou can''t duel yourself, silly!'
-      attempt-duel-target-already-dueling: '&e%target% is already ina duel!'
+      attempt-duel-target-already-dueling: '&e%target% is already in a duel!'
       challenge: '&eYou challenged %target% to a duel!'
       inform-challenged:
         value: '&e%target% challenged you to a duel! Type /duel %player% to accept!'
@@ -67,14 +65,14 @@ messages:
       win:
         value: '&eYou won the duel!'
         sound:
-          enabled: false
+          enabled: true
           sound: BLOCK_NOTE_BLOCK_PLING
           volume: 1.0
           pitch: 1.0
       lose:
         value: '&eYou lost the duel!'
         sound:
-          enabled: false
+          enabled: true
           sound: BLOCK_NOTE_BLOCK_PLING
           volume: 1.0
           pitch: 1.0

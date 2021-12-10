@@ -75,7 +75,8 @@ public class MessageHandler {
         String output = text;
         
         output = output.replace("%value%", context.isValue() ? wordOn : wordOff);
-        output = output.replace("%special%", context.getSpecial());
+        if(context.getSpecial() != null)
+            output = output.replace("%special%", context.getSpecial());
         if(context.getTarget() != null)
             output = output.replace("%target%", context.getTarget().getDisplayName());
         if(context.getPlayer() != null)
