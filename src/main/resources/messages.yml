@@ -28,7 +28,7 @@ messages:
           volume: 1.0
           pitch: 1.0
       inform-target-pvp-disabled:
-        value: '&e%defender%''s PvP is disabled!'
+        value: '&e%target%''s PvP is disabled!'
         sound:
           enabled: true
           sound: BLOCK_NOTE_BLOCK_PLING
@@ -62,6 +62,13 @@ messages:
           volume: 1.0
           pitch: 1.0
     player:
+      inform-already-dueling:
+        value: "&eYou or %target% is already in a duel!"
+        sound:
+          enabled: true
+          sound: BLOCK_NOTE_BLOCK_PLING
+          volume: 1.0
+          pitch: 1.0
       win:
         value: '&eYou won the duel!'
         sound:
@@ -76,5 +83,7 @@ messages:
           sound: BLOCK_NOTE_BLOCK_PLING
           volume: 1.0
           pitch: 1.0
+  logging:
+    new-player-default-prefs-notification: "Setting default player preferences for new player"
 
 config-version: 1
