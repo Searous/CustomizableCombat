@@ -20,6 +20,6 @@ permissions:
     default: true
   customizable-combat.duel:
     description:  Gives access to the /duel command
-    default: true
+    default: false
 softdepend:
   - PlaceholderAPI

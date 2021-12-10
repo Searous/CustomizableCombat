@@ -44,8 +44,9 @@ public class CommandPvp extends BaseCommand {
             return;
         }
         
-        MessageContext context = new MessageContext("messages.pvp.command.set-other", player)
-            .setValue(value);
+        MessageContext context = new MessageContext("messages.pvp.command.set-other", sender)
+            .setValue(value)
+            .setTarget(player);
         plugin.getMessageHandler().sendMessage(context);
     }
     
@@ -53,21 +54,18 @@ public class CommandPvp extends BaseCommand {
     @CommandCompletion("@players")
     @CommandPermission("customizable-combat.pvp.check")
     public static void onCheck(CommandSender sender, String target) {
-        Player player = plugin.getServer().getPlayer(target);
-        if(player == null) {
-            if(sender instanceof Player) {
-                player = (Player) sender;
-            } else {
-                MessageContext context = new MessageContext("messages.cannot-find-target", sender)
-                    .setSpecial(target);
-                plugin.getMessageHandler().sendMessage(context);
-                return;
-            }
+        Player other = plugin.getServer().getPlayer(target);
+        if(other == null) {
+            MessageContext context = new MessageContext("messages.cannot-find-target", sender)
+                .setSpecial(target);
+            plugin.getMessageHandler().sendMessage(context);
+            return;
         }
         
-        boolean value = plugin.getPvpEnabled(player.getUniqueId());
-        MessageContext context = new MessageContext("messages.pvp.command.check", player)
-            .setValue(value);
+        boolean value = plugin.getPvpEnabled(other.getUniqueId());
+        MessageContext context = new MessageContext("messages.pvp.command.check", sender)
+            .setValue(value)
+            .setTarget(other);
         plugin.getMessageHandler().sendMessage(context);
     }
     

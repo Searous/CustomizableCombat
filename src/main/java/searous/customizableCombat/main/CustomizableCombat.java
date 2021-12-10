@@ -1,6 +1,7 @@
 package searous.customizableCombat.main;
 
 import co.aikar.commands.BukkitCommandManager;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
@@ -19,6 +20,7 @@ import java.util.logging.Level;
 
 /**
  * Main class of Customizable Combat
+ * This thing is a mess, and I plan to fix this in a future update
  *
  * @author Katie (Searous)
  */
@@ -66,6 +68,11 @@ public final class CustomizableCombat extends JavaPlugin {
         this.getServer().getConsoleSender().sendMessage(strings.LOG_HEADER + "Loading configs...");
         reloadConfig();
         this.getServer().getConsoleSender().sendMessage(strings.LOG_HEADER + "All configs loaded!");
+        
+        // Placeholder API
+        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new InternalPAPIExpansion(this).register();
+        }
         
         // Create event handler
         eventHandler = new EventHandler(this);

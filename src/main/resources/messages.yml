@@ -1,13 +1,40 @@
+# This config contains all in-game chat messages and a few console messages
+# All messages support sounds (if applicable), however the current
+# method used to allow comments in configs will delete modifications to
+# the structure seen below. If you really want this, try setting this file to
+# read only.
+#
+# Built in placeholders:
+# %player% - The player who performed the action or executed the command
+# %target% - The other player, or target. You may use %other% for the same purpose as well
+# %value% - A value, usually true or false, used as the "value" of the current context
+# %special% - A special string which is different for each message, and is set internally
+# %key% - The key or path to the current message
+#
+# If PlaceholderAPI is present, you may use these as well, more will be added later:
+# %customizablecombat_pvp_preference% - The pvp preference of the player
+# %customizablecombat_pvp_override_enabled% - If global PvP is enabled
+# %customizablecombat_pvp_override_setting% - The setting forced by the global override, if enabled
+
+# Chat prefix. Added to the beginning of all strings in the messages section
 chat-prefix: ''
+# Set this to false to force disable PlaceholderAPI. Does nothing if it is not installed
 use-placeholder-api: true
-message-not-found: 'No message found: %key%'
+# Fallback message if something breaks. You should never see this.
+message-not-found: '&cNo message found: %key%'
 
+# Words used for the %value% placeholder
 words:
-  true: 'on'
-  false: 'off'
+  true: '&bon'
+  false: '&boff'
 
+# A sorted list of messages. These support placeholders and chat colors.
+# To add sound to a message, look at "inform-disabled" under player.
+# The sound field is the internal name of the sound, a list can be found
+# here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
+# These names should closely match those used with the /playsound command
 messages:
-  cannot-find-target: 'Unable to locate player ''%special%'''
+  cannot-find-target: '&cUnable to locate player ''%special%'''
 
   pvp:
     command:
@@ -15,10 +42,10 @@ messages:
       set-other: '&e%target%''s PvP has been set to: %value%'
       check: '&e%target%''s PvP is set to: %value%'
       override:
-        set: 'PvP override set to: %value%'
-        check: 'PvP override is set to: %value%'
-        enabled: 'PvP override is now: %value%'
-        enabled-check: 'PvP override is: %value%'
+        set: '&ePvP override set to: %value%'
+        check: '&ePvP override is set to: %value%'
+        enabled: '&ePvP override is now: %value%'
+        enabled-check: '&ePvP override is: %value%'
     player:
       inform-disabled:
         value: '&ePvP is disabled!'
@@ -47,13 +74,13 @@ messages:
       attempt-duel-target-already-dueling: '&e%target% is already in a duel!'
       challenge: '&eYou challenged %target% to a duel!'
       inform-challenged:
-        value: '&e%target% challenged you to a duel! Type /duel %player% to accept!'
+        value: '&e%target% challenged you to a duel! Type /duel %target% to accept!'
         sound:
           enabled: false
           sound: BLOCK_NOTE_BLOCK_PLING
           volume: 1.0
           pitch: 1.0
-      accept: 'You accepted %target%''s challenge!'
+      accept: '&eYou accepted %target%''s challenge!'
       inform-accepted:
         value: '&e%target% accepted your challenge!'
         sound:
@@ -86,4 +113,6 @@ messages:
   logging:
     new-player-default-prefs-notification: "Setting default player preferences for new player"
 
+# DO NOT TOUCH!!!
+# Marks the current version of this config file
 config-version: 1

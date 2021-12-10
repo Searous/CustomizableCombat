@@ -26,12 +26,12 @@ public class MessageHandler {
     public void reload() {
         FileConfiguration messages = plugin.getMessagesConfig();
         // Messages
-        noMessageFound = messages.getString("message-not-found", "No message found: %key%");
+        noMessageFound = messages.getString("message-not-found", "&cNo message found: %key%");
         chatPrefix = messages.getString("chat-prefix", "");
         
         // Words
-        wordOn = messages.getString("words.on", "on");
-        wordOff = messages.getString("words.off", "off");
+        wordOn = messages.getString("words.true", "&bon");
+        wordOff = messages.getString("words.false", "&boff");
         
         // Flags
         // NOTE: This may need to be adapted to check if placeholder api is enabled in the future
@@ -58,14 +58,14 @@ public class MessageHandler {
         
         // Parse proprietary placeholders
         output.text = parsePlaceholders(context, output.text);
-    
-        // Parse chat colors
-        output.text = ChatColor.translateAlternateColorCodes('&', output.text);
         
         // Parse placeholder api placeholders
         if(usePlaceholderApi) {
             output.text = PlaceholderAPI.setPlaceholders(context.getPlayer(), output.text);
         }
+        
+        // Parse chat colors
+        output.text = ChatColor.translateAlternateColorCodes('&', output.text);
         
         // Return
         return output;
@@ -77,8 +77,10 @@ public class MessageHandler {
         output = output.replace("%value%", context.isValue() ? wordOn : wordOff);
         if(context.getSpecial() != null)
             output = output.replace("%special%", context.getSpecial());
-        if(context.getTarget() != null)
+        if(context.getTarget() != null) {
             output = output.replace("%target%", context.getTarget().getDisplayName());
+            output = output.replace("%other%", context.getTarget().getDisplayName());
+        }
         if(context.getPlayer() != null)
             output = output.replace("%player%", context.getPlayer().getDisplayName());
         output = output.replace("%key%", context.getMessagePath());

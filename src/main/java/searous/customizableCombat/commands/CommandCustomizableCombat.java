@@ -23,6 +23,7 @@ public class CommandCustomizableCombat extends BaseCommand {
     @Subcommand("reload")
     public static void onReload(CommandSender sender) {
         plugin.reloadConfig();
+        plugin.getMessageHandler().reload();
         
         String message = "All configs reloaded!";
         plugin.getLogger().log(Level.INFO, plugin.getStrings().LOG_HEADER + message);
