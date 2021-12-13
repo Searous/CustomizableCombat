@@ -88,7 +88,7 @@ public final class CustomizableCombat extends JavaPlugin {
         commandManager.registerCommand(new CommandCustomizableCombat(this));
         commandManager.registerCommand(new CommandPvp(this));
         commandManager.registerCommand(new CommandDuel(this));
-        commandManager.registerCommand(new CommandTest(this));
+        //commandManager.registerCommand(new CommandTest(this));
         
         // Register Events
         this.getServer().getPluginManager().registerEvents(eventHandler, this);
