@@ -130,10 +130,10 @@ public class EventHandler implements Listener {
         Object o = plugin.getPlayerPreferences().get(player.getUniqueId().toString());
         
         if(o == null) {
-            MessageContext context = new MessageContext("", Bukkit.getServer().getConsoleSender())
+            MessageContext context = new MessageContext("messages.logging.new-player-default-prefs-notification", Bukkit.getServer().getConsoleSender())
                 .setTarget(player);
             plugin.getMessageHandler().sendMessage(context);
-
+            
             plugin.getPlayerPreferences().set(player.getUniqueId().toString() + "." + plugin.getStrings().PREFERANCE_PVP, plugin.getWorldsConfig().getBoolean("global.pvp-default"));
             //plugin.saveConfig(plugin.filePlayers,);
         }
