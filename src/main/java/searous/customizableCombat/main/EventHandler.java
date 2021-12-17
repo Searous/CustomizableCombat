@@ -127,14 +127,14 @@ public class EventHandler implements Listener {
     @org.bukkit.event.EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        Object o = plugin.getPlayerPreferences().get(player.getUniqueId().toString());
+        Object o = plugin.getFileHandler().getPlayersConfig().get(player.getUniqueId().toString());
         
         if(o == null) {
             MessageContext context = new MessageContext("messages.logging.new-player-default-prefs-notification", Bukkit.getServer().getConsoleSender())
                 .setTarget(player);
             plugin.getMessageHandler().sendMessage(context);
             
-            plugin.getPlayerPreferences().set(player.getUniqueId().toString() + "." + plugin.getStrings().PREFERANCE_PVP, plugin.getWorldsConfig().getBoolean("global.pvp-default"));
+            plugin.getFileHandler().getPlayersConfig().set(player.getUniqueId().toString() + "." + plugin.getStrings().PREFERANCE_PVP, plugin.getFileHandler().getWorldsConfig().getBoolean("global.pvp-default"));
             //plugin.saveConfig(plugin.filePlayers,);
         }
     }

@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import searous.customizableCombat.commands.*;
 import searous.customizableCombat.duel.DuelManager;
+import searous.customizableCombat.file.FileHandler;
 import searous.customizableCombat.messages.MessageHandler;
 import searous.customizableCombat.utilities.ConfigUpdater;
 
@@ -30,43 +31,30 @@ public final class CustomizableCombat extends JavaPlugin {
      * Contains the event handler
      */
     private EventHandler eventHandler = null;
-    /**
-     * Contains the command executor for the /pvp command
-     */
-    //private CommandPvp commandPvp = null;
     private MessageHandler messageHandler;
-    
     private DuelManager duelManager = null;
     
     // Strings
     private Strings strings = null;
     
-    // Custom Configs
-    /**
-     * Config file for player preferences file
-     */
-    private File filePlayers = null;
-    /**
-     * Bukkit configuration loaded/saved from players.yml
-     */
-    private FileConfiguration players = null;
-    
-    private File fileWorlds = null;
-    private FileConfiguration worlds = null;
-    
-    private File fileMessages = null;
-    private FileConfiguration messages = null;
-    
     public BukkitCommandManager commandManager;
+    private FileHandler fileHandler;
+    public FileHandler getFileHandler() { return fileHandler; }
     
     @Override
     public void onEnable() {
         // Strings
         strings = new Strings(this);
         
+        // File Handler
+        fileHandler = new FileHandler(this);
+    
+        // Create message handler
+        messageHandler = new MessageHandler(this);
+        
         // Config
         this.getServer().getConsoleSender().sendMessage(strings.LOG_HEADER + "Loading configs...");
-        reloadConfig();
+        relaod();
         this.getServer().getConsoleSender().sendMessage(strings.LOG_HEADER + "All configs loaded!");
         
         // Placeholder API
@@ -76,9 +64,6 @@ public final class CustomizableCombat extends JavaPlugin {
         
         // Create event handler
         eventHandler = new EventHandler(this);
-        
-        // Create message handler
-        messageHandler = new MessageHandler(this);
         
         // Register commands
         //commandPvp = new CommandPvp(this);
@@ -104,68 +89,16 @@ public final class CustomizableCombat extends JavaPlugin {
     public void onDisable() {
         // Plugin shutdown logic
         //this.saveConfig();
-        this.getLogger().log(Level.INFO, strings.LOG_HEADER + "Config Saved");
-        
-        savePlayersConfig();
-        this.getLogger().log(Level.INFO, strings.LOG_HEADER + "Player preferences saved");
-        saveWorldsConfig();
-        this.getLogger().log(Level.INFO, strings.LOG_HEADER + "Player preferences saved");
+        fileHandler.saveConfigs();
+        this.getLogger().log(Level.INFO, strings.LOG_HEADER + "Configs Saved");
         
         // Plugin disable complete
         this.getLogger().log(Level.INFO, strings.LOG_HEADER + "Plugin disabling complete");
     }
     
-    @Override
-    public void reloadConfig() {
-        this.saveDefaultConfig();
-        File configFile = new File(getDataFolder(), "config.yml");
-    
-        try {
-            ConfigUpdater.update(this, "config.yml", configFile, Arrays.asList());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    
-        super.reloadConfig();
-    
-        List<String> pets = getConfig().getStringList(strings.CONFIG_PROTECTED_PETS);
-        for(int i = 0; i < pets.size(); i++) {
-            String entry = pets.get(i);
-        
-            entry = entry.toUpperCase();
-            entry = entry.trim();
-            entry = entry.replace(' ', '_');
-        
-            pets.set(i, entry);
-        }
-        getConfig().set(strings.CONFIG_PROTECTED_PETS, pets);
-    
-        List<String> mounts = getConfig().getStringList(strings.CONFIG_PROTECTED_MOUNTS);
-        for(int i = 0; i < mounts.size(); i++) {
-            String entry = mounts.get(i);
-        
-            entry = entry.toUpperCase();
-            entry = entry.trim();
-            entry = entry.replace(' ', '_');
-        
-            mounts.set(i, entry);
-        }
-        getConfig().set(strings.CONFIG_PROTECTED_MOUNTS, mounts);
-    
-        filePlayers = new File(this.getDataFolder(), "players.yml");
-        players = YamlConfiguration.loadConfiguration(filePlayers);
-        players.options().copyDefaults(true);
-        savePlayersConfig();
-    
-        fileWorlds = new File(this.getDataFolder(), "worlds.yml");
-        worlds = YamlConfiguration.loadConfiguration(fileWorlds);
-        worlds.options().copyDefaults(true);
-        saveWorldsConfig();
-        
-        fileMessages = new File(this.getDataFolder(), "messages.yml");
-        messages = YamlConfiguration.loadConfiguration(fileMessages);
-        messages.options().copyDefaults(true);
-        saveMessagesConfig();
+    public void relaod() {
+        fileHandler.loadConfigs();
+        messageHandler.reload();
     }
     
     // Getters
@@ -176,12 +109,6 @@ public final class CustomizableCombat extends JavaPlugin {
      */
     public Listener getEventHandler() { return eventHandler; }
     /**
-     * Gets the {@link FileConfiguration} containing the player preferences config players.yml
-     *
-     * @return Player preferences configuration
-     */
-    public FileConfiguration getPlayerPreferences() { return players; }
-    /**
      * Gets strings
      *
      * @return Instance of {@link Strings}
@@ -189,32 +116,6 @@ public final class CustomizableCombat extends JavaPlugin {
     public Strings getStrings() { return strings; }
     
     // Methods
-    /**
-     * Saves player preferences config
-     */
-    public void savePlayersConfig() {
-        try {
-            players.save(filePlayers);
-        } catch (IOException ex) {
-            this.getLogger().log(Level.SEVERE, strings.LOG_HEADER + "Could not save player preferences config to " + filePlayers, ex);
-        }
-    }
-    public void saveWorldsConfig() {
-        try {
-            worlds.save(fileWorlds);
-        } catch (IOException ex) {
-            this.getLogger().log(Level.SEVERE, strings.LOG_HEADER + "Could not save worlds config to " + fileWorlds, ex);
-        }
-    }
-    public void saveMessagesConfig() {
-        File configFile = new File(getDataFolder(), "messages.yml");
-        
-        try {
-            ConfigUpdater.update(this, "messages.yml", configFile, Arrays.asList());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
     
     /**
      * Gets weather or not the given player has PvP enabled
@@ -223,14 +124,14 @@ public final class CustomizableCombat extends JavaPlugin {
      * @return Given player's PvP preference as shown in the player preferences file players.yml
      */
     public boolean getPvpEnabled(UUID playerId) {
-        return players.getBoolean(playerId.toString() + "." + strings.PREFERANCE_PVP);
+        return fileHandler.getPlayersConfig().getBoolean(playerId.toString() + "." + strings.PREFERANCE_PVP);
     }
     
     /**
      * Gets if global PvP is enabled
      */
     public boolean getPvpEnabledGlobal() {
-        return worlds.getBoolean("global." + strings.CONFIG_PVP_GLOBAL_ENABLED);
+        return fileHandler.getWorldsConfig().getBoolean("global." + strings.CONFIG_PVP_GLOBAL_ENABLED);
     }
     
     /**
@@ -239,7 +140,7 @@ public final class CustomizableCombat extends JavaPlugin {
      * @return PvP Override setting
      */
     public boolean getPvpEnabledOverride() {
-        return worlds.getBoolean("global." + strings.CONFIG_PVP_GLOBAL_OVERRIDE);
+        return fileHandler.getWorldsConfig().getBoolean("global." + strings.CONFIG_PVP_GLOBAL_OVERRIDE);
     }
     
     /**
@@ -249,14 +150,9 @@ public final class CustomizableCombat extends JavaPlugin {
      * @param enabled New PvP state
      */
     public void setPvpEnabled(UUID playerId, boolean enabled) {
-        players.set(playerId.toString() + "." + strings.PREFERANCE_PVP, enabled);
+        fileHandler.getPlayersConfig().set(playerId.toString() + "." + strings.PREFERANCE_PVP, enabled);
     }
-    
-    public FileConfiguration getWorldsConfig() {
-        return worlds;
-    }
-    public FileConfiguration getMessagesConfig() { return messages; }
-    
+
     /**
      * Sets both global, and global override settings. May change in the future
      *
@@ -264,9 +160,10 @@ public final class CustomizableCombat extends JavaPlugin {
      * @param override New global override setting
      */
     public void setPvpEnabledGlobal(boolean global, boolean override) {
+        FileConfiguration worlds = fileHandler.getWorldsConfig();
         worlds.set("global." + strings.CONFIG_PVP_GLOBAL_ENABLED, global);
         worlds.set("global." + strings.CONFIG_PVP_GLOBAL_OVERRIDE, override);
-        saveWorldsConfig();
+        //saveWorldsConfig();
     }
     
     public DuelManager getDuelManager() {

@@ -14,7 +14,7 @@ public class Message {
     public float volume, pitch;
     
     public Message(CustomizableCombat plugin, String path, String def) {
-        FileConfiguration messages = plugin.getMessagesConfig();
+        FileConfiguration messages = plugin.getFileHandler().getMessagesConfig();
         
         text = messages.getString(path + ".value", def);
         playSound = messages.getBoolean(path + ".sound.enabled");

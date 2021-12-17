@@ -20,11 +20,11 @@ public class MessageHandler {
         this.plugin = plugin;
         
         // Fetch config
-        reload();
+        //reload();
     }
     
     public void reload() {
-        FileConfiguration messages = plugin.getMessagesConfig();
+        FileConfiguration messages = plugin.getFileHandler().getMessagesConfig();
         // Messages
         noMessageFound = messages.getString("message-not-found", "&cNo message found: %key%");
         chatPrefix = messages.getString("chat-prefix", "");
@@ -89,7 +89,7 @@ public class MessageHandler {
     }
     
     private Message readMessage(String path) {
-        FileConfiguration messages = plugin.getMessagesConfig();
+        FileConfiguration messages = plugin.getFileHandler().getMessagesConfig();
         if(messages.isString(path))
             return new Message(messages.getString(path, noMessageFound));
         else if(messages.isSet(path))

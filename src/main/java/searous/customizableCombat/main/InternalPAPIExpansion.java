@@ -58,8 +58,8 @@ public class InternalPAPIExpansion extends PlaceholderExpansion {
     // Private utility
     private String getOnOff(boolean value) {
         if(value)
-            return plugin.getMessagesConfig().getString("words.true");
+            return plugin.getFileHandler().getMessagesConfig().getString("words.true");
         else
-            return plugin.getMessagesConfig().getString("words.false");
+            return plugin.getFileHandler().getMessagesConfig().getString("words.false");
     }
 }
